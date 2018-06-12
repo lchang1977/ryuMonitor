@@ -1,4 +1,4 @@
-import pandas as pdm
+import pandas as pd
 import matplotlib.pylab as plt
 from pyramid.arima import auto_arima
 
@@ -37,9 +37,9 @@ class Model:
 
         print(future_forecast)
 
-        future_forecast = pdm.DataFrame(future_forecast, index=self.test.index, columns=['Prediction'])
+        future_forecast = pd.DataFrame(future_forecast, index=self.test.index, columns=['Prediction'])
 
-        pdm.concat([self.__data, future_forecast], axis=1).plot()
+        pd.concat([self.__data, future_forecast], axis=1).plot()
 
         plt.show()
 
