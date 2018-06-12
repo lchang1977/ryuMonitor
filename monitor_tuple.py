@@ -1,4 +1,5 @@
 from operator import attrgetter
+from arch import arch_model
 
 from ryu.app import simple_switch_13
 from ryu.controller import ofp_event
@@ -7,7 +8,7 @@ from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
 from arima import Arima
-from arch import arch_model
+from prediction import Model
 
 import matplotlib.pylab as plt
 import numpy as np
@@ -21,6 +22,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         self.threshold = 2000.00
         self.training_size = 500
+        self.freq_prediction = 30
+        self.num_measure = 0
         self.filename = 'bandwidth.csv'
         self.time_interval = 10
         self.bws = []
@@ -112,6 +115,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                                  rx_bw, tx_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
+                self.num_measure += 1
                 self.__add_item(rx_bw)
 
     def _predict_var_gar(self, values):
@@ -154,5 +158,9 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             fd = open(self.filename, 'a')
             fd.write(self.bws[-1])
             fd.close()
+
+        model = Model(self.bws)
+        model.fit()
+        model.predict()
 
 
