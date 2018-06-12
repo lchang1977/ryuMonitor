@@ -1,4 +1,4 @@
-# ryuMonitor
+# Ryu Monitor
 SDN controller for monitoring load on OpenVSwitch. Python scripts for a Ryu controller running on controller node in a cloud 
 infrastructure.
 
@@ -29,6 +29,19 @@ ryu-manager --ofp-tcp-listen-port 5555 --verbose ryu.app.simple_monitor_13
 In this case you are running a sample implementation of Traffic Monitor.
 It is important to specify a new port to listen, instead of the default 6633, in a OpenStack enviroment, due to other processes
 listening on the default one.
+
+### Deployment
+
+The program is based on external libraries, if not present please install them via pip:
+```
+sudo pip install --upgrade cython
+sudo pip install arch
+
+```
+Now you are able to run the controller:
+```
+ryu-manager --ofp-tcp-listen-port 5555 --verbose ryuMonitor/monitor_tuple.py
+```
 
 ### Helpful commands
 
