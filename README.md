@@ -36,7 +36,8 @@ The program is based on external libraries, if not present please install them v
 ```
 sudo pip install --upgrade cython
 sudo pip install arch
-
+sudo pip install pyramid
+sudo pip install pyramid-arima
 ```
 Now you are able to run the controller:
 ```
