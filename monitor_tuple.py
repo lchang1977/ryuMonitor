@@ -115,7 +115,6 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                                  rx_bw, tx_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
-                self.num_measure += 1
                 self.__add_item(rx_bw)
 
     def _predict_var_gar(self, values):
@@ -159,8 +158,13 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             fd.write(self.bws[-1])
             fd.close()
 
-        model = Model(self.bws)
-        model.fit()
-        model.predict()
+        # increment number updates and check if time to perform prediction
+        self.num_measure += 1
+        if self.num_measure == self.freq_prediction:
+            model = Model(self.bws)
+            model.fit()
+            model.predict()
+            self.num_measure = 0
+
 
 
