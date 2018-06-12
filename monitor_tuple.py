@@ -1,5 +1,4 @@
 from operator import attrgetter
-from arch import arch_model
 
 from ryu.app import simple_switch_13
 from ryu.controller import ofp_event
@@ -117,7 +116,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                 self.prev[key]['prev_tx'] = tx_bytes
                 self.__add_item(rx_bw)
 
-    def _predict_var_gar(self, values):
+    '''def _predict_var_gar(self, values):
 
         garch11 = arch_model(values, p=1, q=1)
         results = garch11.fit(update_freq=10)
@@ -136,7 +135,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         plt.hist(sims.values[-1, 30], bins=50)
         plt.title('Distribution of Returns')
 
-        plt.show()
+        plt.show()'''
 
     def _predict_arima(self, values):
 

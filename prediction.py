@@ -1,10 +1,6 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pylab as plt
-import statsmodels.tsa.api as smt
-from statsmodels.tsa.seasonal import seasonal_decompose
 from pyramid.arima import auto_arima
-from arch import arch_model
 
 
 class Model:
