@@ -53,7 +53,7 @@ Run these commands on the compute nodes.
 sudo ovs-vsctl show
 
 #set the new controller for **br-flat-lan-1** bridge
-sudo ovs-vsctl set-controller br-flat-lan-1 tcp:ctl:5555
+sudo ovs-vsctl set-controller br-flat-lan-1 tcp:<Controller_IP>:5555
 
 #view forwarding table (mac address table)
 sudo ovs-appctl fdb/show
