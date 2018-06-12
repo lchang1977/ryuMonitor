@@ -154,9 +154,9 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                 writer.writerows(self.bws)
 
         else:
-            fd = open(self.filename, 'a')
-            fd.write(self.bws[-1])
-            fd.close()
+            with open(self.filename, 'a') as f:
+                writer = csv.writer(f)
+                writer.writerow(self.bws[-1])
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
