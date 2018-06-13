@@ -108,7 +108,16 @@ class Arima:
         # self.test = self.__data.loc['2015-01-01':]
 
         self.train = self.__data[:train_size]
-        self.test = self.__data[(train_size-30):]
+        if type(train_size) is str:
+            index = len(self.__data)
+            index = list(self.__data.index).index(pd.to_datetime(train_size))
+            if index >= 30:
+                index -= 30
+        elif train_size >= 30:
+            index = train_size - 30
+        else:
+            index = train_size
+        self.test = self.__data[index:]
 
         self.model.fit(self.train)
 

@@ -23,7 +23,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         self.threshold = 2000.00
         self.training_size = 10
-        self.freq_prediction = 5
+        self.freq_prediction = 20
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
@@ -103,7 +103,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # check if first packet
             if key not in self.prev :
                 self.logger.info('First packet')
-                self.bws[datapath_id] = []
+                self.bws[datapath_id] = pd.DataFrame(data=[], columns=['BW'])
                 self.prev[key] = {}
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
@@ -150,18 +150,18 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         arima.predict()
 
     def __add_item(self, item, switch_id):
-        self.bws[switch_id].append([datetime.datetime.now(), item])
+        self.bws[switch_id].append(
+            pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
+        )
 
         if len(self.bws[switch_id]) == self.training_size:
-            del self.bws[switch_id][0]
-            with open('{}{}.csv'.format(self.filename, switch_id), 'w') as writeFile:
-                writer = csv.writer(writeFile)
-                writer.writerows(self.bws[switch_id])
-
+            self.bws[switch_id] = self.bws[switch_id].iloc[1:]
+            # write on csv file all the elements
+            self.bws[switch_id].to_csv('{}{}.csv'.format(self.filename, switch_id), sep=',')
         else:
             with open('{}{}.csv'.format(self.filename, switch_id), 'a') as f:
                 writer = csv.writer(f)
-                writer.writerow(self.bws[switch_id][-1])
+                writer.writerow(self.bws[switch_id].iloc[-1])
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
@@ -173,7 +173,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # Rename column
             data.columns = ['Bandwidth']
             print(data)
-            
+
             model = Model(data)
             model.fit()
             model.predict()
