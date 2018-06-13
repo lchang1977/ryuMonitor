@@ -153,12 +153,12 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
         if len(self.bws[switch_id]) == self.training_size:
             del self.bws[switch_id][0]
-            with open(self.filename + switch_id + ".csv", 'w') as writeFile:
+            with open('{}{}.csv'.format(self.filename, switch_id), 'w') as writeFile:
                 writer = csv.writer(writeFile)
                 writer.writerows(self.bws[switch_id])
 
         else:
-            with open(self.filename + switch_id + ".csv", 'a') as f:
+            with open('{}{}.csv'.format(self.filename, switch_id), 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(self.bws[switch_id][-1])
 

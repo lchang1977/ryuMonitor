@@ -52,8 +52,8 @@
       <file leaf-file-name="monitor_tuple.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-450">
-              <caret line="105" column="35" lean-forward="true" selection-start-line="105" selection-start-column="35" selection-end-line="105" selection-end-column="35" />
+            <state relative-caret-position="645">
+              <caret line="109" column="17" lean-forward="true" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -234,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1528877329849</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="New initialization">
+      <created>1528881670664</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1528881670664</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -287,7 +294,8 @@
     <MESSAGE value="comment out" />
     <MESSAGE value="New way for writing" />
     <MESSAGE value="Data for multiple switches" />
-    <option name="LAST_COMMIT_MESSAGE" value="Data for multiple switches" />
+    <MESSAGE value="New initialization" />
+    <option name="LAST_COMMIT_MESSAGE" value="New initialization" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -375,8 +383,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="105" column="35" lean-forward="true" selection-start-line="105" selection-start-column="35" selection-end-line="105" selection-end-column="35" />
+        <state relative-caret-position="645">
+          <caret line="109" column="17" lean-forward="true" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
