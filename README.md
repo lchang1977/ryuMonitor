@@ -35,6 +35,7 @@ listening on the default one.
 The program is based on external libraries, if not present please install them via pip:
 ```
 sudo pip install --upgrade cython
+sudo pip install numexpr
 sudo pip install arch
 sudo pip install pyramid
 sudo pip install pyramid-arima
