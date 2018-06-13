@@ -21,8 +21,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     def __init__(self, *args, **kwargs):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         self.threshold = 2000.00
-        self.training_size = 500
-        self.freq_prediction = 30
+        self.training_size = 10
+        self.freq_prediction = 10
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
@@ -165,7 +165,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
-            model = Model(self.bws[switch_id])
+            model = Model(pd.DataFrame(list(self.bws[switch_id])))
             model.fit()
             model.predict()
             self.num_measure = 0
