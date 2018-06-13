@@ -53,8 +53,11 @@
       <file leaf-file-name="monitor_tuple.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+            <state relative-caret-position="467">
+              <caret line="169" column="57" selection-start-line="169" selection-start-column="57" selection-end-line="169" selection-end-column="57" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -253,7 +256,14 @@
       <option name="project" value="LOCAL" />
       <updated>1528884677115</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Import">
+      <created>1528884920817</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1528884920817</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -309,7 +319,8 @@
     <MESSAGE value="New initialization" />
     <MESSAGE value="New file name" />
     <MESSAGE value="Test parameters" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test parameters" />
+    <MESSAGE value="Import" />
+    <option name="LAST_COMMIT_MESSAGE" value="Import" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -397,8 +408,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        <state relative-caret-position="467">
+          <caret line="169" column="57" selection-start-line="169" selection-start-column="57" selection-end-line="169" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

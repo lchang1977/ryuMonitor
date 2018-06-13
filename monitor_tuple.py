@@ -166,6 +166,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
+            print(self.bws[switch_id])
+            print(pd.DataFrame(list(self.bws[switch_id])))
             model = Model(pd.DataFrame(list(self.bws[switch_id])))
             model.fit()
             model.predict()
