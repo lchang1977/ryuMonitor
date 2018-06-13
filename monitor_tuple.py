@@ -102,7 +102,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # check if first packet
             if key not in self.prev :
                 self.logger.info('First packet')
-                self.bws[datapath_id] = {}
+                self.bws[datapath_id] = []
                 self.prev[key] = {}
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
