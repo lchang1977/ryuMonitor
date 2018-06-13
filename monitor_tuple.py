@@ -24,9 +24,10 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.training_size = 500
         self.freq_prediction = 30
         self.num_measure = 0
-        self.filename = 'bandwidth.csv'
+        self.interested_port = 1
+        self.filename = 'bandwidth-'
         self.time_interval = 10
-        self.bws = []
+        self.bws = {}
         self.datapaths = {}
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
@@ -101,6 +102,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # check if first packet
             if key not in self.prev :
                 self.logger.info('First packet')
+                self.bws[datapath_id] = {}
                 self.prev[key] = {}
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
@@ -115,7 +117,9 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                                  rx_bw, tx_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
-                self.__add_item(rx_bw)
+
+                if stat.port_no == self.interested_port:
+                    self.__add_item(rx_bw, datapath_id)
 
     def _predict_var_gar(self, values):
 
@@ -144,24 +148,24 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         arima.fit()
         arima.predict()
 
-    def __add_item(self, item):
-        self.bws.append([datetime.datetime.now(), item])
+    def __add_item(self, item, switch_id):
+        self.bws[switch_id].append([datetime.datetime.now(), item])
 
-        if len(self.bws) == self.training_size:
-            del self.bws[0]
-            with open(self.filename, 'w') as writeFile:
+        if len(self.bws[switch_id]) == self.training_size:
+            del self.bws[switch_id][0]
+            with open(self.filename + switch_id + ".csv", 'w') as writeFile:
                 writer = csv.writer(writeFile)
-                writer.writerows(self.bws)
+                writer.writerows(self.bws[switch_id])
 
         else:
-            with open(self.filename, 'a') as f:
+            with open(self.filename + switch_id + ".csv", 'a') as f:
                 writer = csv.writer(f)
-                writer.writerow(self.bws[-1])
+                writer.writerow(self.bws[switch_id][-1])
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
-            model = Model(self.bws)
+            model = Model(self.bws[switch_id])
             model.fit()
             model.predict()
             self.num_measure = 0
