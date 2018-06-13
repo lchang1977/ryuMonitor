@@ -23,7 +23,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         self.threshold = 2000.00
         self.training_size = 10
-        self.freq_prediction = 10
+        self.freq_prediction = 5
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
@@ -167,10 +167,13 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
             print(self.bws[switch_id])
-            data = pd.Series(list(self.bws[switch_id]), index=self.bws[switch_id][0])
+            data = pd.Series(self.bws[switch_id][1], index=self.bws[switch_id][0])
+            print(data)
 
             # Rename column
             data.columns = ['Bandwidth']
+            print(data)
+            
             model = Model(data)
             model.fit()
             model.predict()
