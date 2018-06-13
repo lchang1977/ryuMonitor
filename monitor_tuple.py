@@ -167,8 +167,11 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
             print(self.bws[switch_id])
-            print(pd.DataFrame(list(self.bws[switch_id])))
-            model = Model(pd.DataFrame(list(self.bws[switch_id])))
+            data = pd.Series(list(self.bws[switch_id]), index=self.bws[switch_id][0])
+
+            # Rename column
+            data.columns = ['Bandwidth']
+            model = Model(data)
             model.fit()
             model.predict()
             self.num_measure = 0
