@@ -1,30 +1,49 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from arima import Arima
 from prediction import Model
 
 data1 = pd.read_csv("electric_Production.csv", index_col=0)
+# Interpret index as timestamp
+data1.index = pd.to_datetime(data1.index)
+
+# Rename column
+data1.columns = ['Energy Production']
 arima = Arima(data1)
 #arima.fit()
 #arima.predict()
 
-"""ori = np.array([('2018-06-13 06:57:01.742172', 132),
-       ('2018-06-13 06:57:11.742813', 133),
-       ('2018-06-13 06:57:21.743336', 2257),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-('2018-06-13 06:57:11.742813', 133),
-       ('2018-06-13 06:57:31.743824', 251)])
+ori = np.array([('2018-06-13 06:57:01.742172', 132.23),
+                ('2018-06-13 06:57:11.742812', 133.32),
+                ('2018-06-13 06:57:21.743336', 2257.68),
+                ('2018-06-13 06:57:11.742813', 133.3),
+                ('2018-06-13 06:57:11.742814', 133.2),
+                ('2018-06-13 06:57:11.742815', 133.9),
+                ('2018-06-13 06:57:11.742816', 133.1),
+                ('2018-06-13 06:57:11.742817', 133.1),
+                ('2018-06-13 06:57:11.742818', 133.02),
+                ('2018-06-13 06:57:11.742819', 133.05),
+                ('2018-06-13 06:57:11.742820', 133.0),
+                ('2018-06-13 06:57:11.742821', 133.31),
+                ('2018-06-13 06:57:11.742822', 133.98),
+                ('2018-06-13 06:57:11.742823', 133.42),
+                ('2018-06-13 06:57:11.742824', 133.42),
+                ('2018-06-13 06:57:11.742825', 133.42),
+                ('2018-06-13 06:57:31.743826', 251)])
+
+data = pd.DataFrame(data=ori[:, 1:], index=ori[:, 0], columns=['BW'])
+data.index = pd.to_datetime(data.index)
+
+#data.plot()
+#plt.plot(ori)
+#plt.show()
+
+model = Model(data)
+model.fit()
+model.predict(5, 30)
+
+"""
 
 #data = pd.DataFrame(data=ori[:, 1:], index=ori[:, 0], columns=['BW'])
 data = pd.DataFrame(data=[], columns=['BW'])
@@ -33,16 +52,6 @@ data = pd.DataFrame(data=[], columns=['BW'])
 data.index = pd.to_datetime(data.index)
 print(data)
 
-new = np.array([pd.to_datetime('2018-06-13 06:57:41.744592'), 119])
-newD = pd.DataFrame(data=[119], index=['2018-06-13 06:57:41.744592'], columns=['BW'])
-data = data.append(newD)
-print(data)
-
-# Interpret index as timestamp
-data1.index = pd.to_datetime(data1.index)
-
-# Rename column
-data1.columns = ['Energy Production']
 
 model = Model(data)
 model.fit()

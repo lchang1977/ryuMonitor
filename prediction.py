@@ -1,14 +1,19 @@
 import pandas as pd
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 from pyramid.arima import auto_arima
 
 
 class Model:
 
     def __init__(self, data):
+        data = data.astype(float)
         self.__data = data
         self.model = {}
         self.res = []
+        print(self.__data.head())
+        plt.plot(self.__data)
+        # self.__data.plot()
+        plt.show()
 
     def fit(self):
         self.model = auto_arima(self.__data, start_p=1, start_q=1,
@@ -30,14 +35,16 @@ class Model:
 
         self.model.fit(self.__data)
 
-    def predict(self, horizon):
+    def predict(self, horizon, sample_frequency):
         future_forecast = self.model.predict(n_periods=horizon)
 
+        future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
+                     for i, v in enumerate([self.__data.index[-1]]*horizon)]
         # This returns an array of predictions:
 
         print(future_forecast)
 
-        future_forecast = pd.DataFrame(future_forecast, index=self.test.index, columns=['Prediction'])
+        future_forecast = pd.DataFrame(future_forecast, index=future_ts, columns=['Prediction'])
 
         pd.concat([self.__data, future_forecast], axis=1).plot()
 

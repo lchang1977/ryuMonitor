@@ -24,6 +24,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.threshold = 2000.00
         self.training_size = 10
         self.freq_prediction = 20
+        self.forecast_size = 15
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
@@ -149,12 +150,17 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         arima.fit()
         arima.predict()
 
+    def check_maximum(self, prediction):
+        if max(prediction) > self.threshold:
+            # do something!!!!!!
+            print('Excessive load in the future')
+
     def __add_item(self, item, switch_id):
         self.bws[switch_id].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
 
-        if len(self.bws[switch_id]) == self.training_size:
+        if len(self.bws[switch_id]) == self.training_size + 1:
             self.bws[switch_id] = self.bws[switch_id].iloc[1:]
             # write on csv file all the elements
             self.bws[switch_id].to_csv('{}{}.csv'.format(self.filename, switch_id), sep=',')
@@ -166,18 +172,18 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
-            print(self.bws[switch_id])
-            data = pd.Series(self.bws[switch_id][1], index=self.bws[switch_id][0])
-            print(data)
-
-            # Rename column
-            data.columns = ['Bandwidth']
-            print(data)
-
-            model = Model(data)
-            model.fit()
-            model.predict()
             self.num_measure = 0
+
+            # to modify
+            print(self.bws[switch_id])
+
+            # use ARIMA for predict
+            model = Model(self.bws[switch_id])
+            model.fit()
+            prediction = model.predict(self.forecast_size, self.time_interval)
+
+            # use the predicted values for changing routing
+            self.check_maximum(prediction)
 
 
 
