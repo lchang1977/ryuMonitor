@@ -159,8 +159,6 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.bws[switch_id] = self.bws[switch_id].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
-        print(len(self.bws[switch_id]))
-        print(self.bws[switch_id])
 
         if len(self.bws[switch_id]) == self.training_size + 1:
             self.bws[switch_id] = self.bws[switch_id].iloc[1:]
