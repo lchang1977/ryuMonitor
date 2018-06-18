@@ -21,14 +21,18 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
     def __init__(self, *args, **kwargs):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
+        # limit for bandwidth, if over react
         self.threshold = 2000.00
         self.training_size = 10
+        # perform a prediction every X packets(measures)
         self.freq_prediction = 20
+        # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
-        self.time_interval = 10
+        # perform request to switch every X second
+        self.time_interval = 1
         self.bws = {}
         self.datapaths = {}
         self.prev = {}
@@ -146,9 +150,9 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
     def _predict_arima(self, values):
 
-        arima = Arima(values)
+        arima = Model(values)
         arima.fit()
-        arima.predict()
+        return arima.predict(self.forecast_size, self.time_interval)
 
     def check_maximum(self, prediction):
         if max(prediction) > self.threshold:
@@ -178,9 +182,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             print(self.bws[switch_id])
 
             # use ARIMA for predict
-            model = Model(self.bws[switch_id])
-            model.fit()
-            prediction = model.predict(self.forecast_size, self.time_interval)
+            prediction = self._predict_arima(self.bws[switch_id])
 
             # use the predicted values for changing routing
             self.check_maximum(prediction)
