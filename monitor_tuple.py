@@ -156,7 +156,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             print('Excessive load in the future')
 
     def __add_item(self, item, switch_id):
-        self.bws[switch_id].append(
+        self.bws[switch_id] = self.bws[switch_id].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
         print(len(self.bws[switch_id]))
