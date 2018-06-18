@@ -40,6 +40,12 @@ sudo pip install arch
 sudo pip install pyramid
 sudo pip install pyramid-arima
 ```
+
+In some cases it could be necassary to run also:
+```
+sudo pip install numexpr --upgrade
+```
+
 Now you are able to run the controller:
 ```
 ryu-manager --ofp-tcp-listen-port 5555 --verbose ryuMonitor/monitor_tuple.py
