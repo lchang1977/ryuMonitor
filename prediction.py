@@ -35,6 +35,11 @@ class Model:
 
         self.model.fit(self.__data)
 
+    def show_and_save(self, forecast):
+        pd.concat([self.__data, forecast], axis=1).plot()
+        plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
+        plt.show()
+
     def predict(self, horizon, sample_frequency):
         future_forecast = self.model.predict(n_periods=horizon)
 
@@ -46,8 +51,6 @@ class Model:
 
         future_forecast = pd.DataFrame(future_forecast, index=future_ts, columns=['Prediction'])
 
-        pd.concat([self.__data, future_forecast], axis=1).plot()
-
-        plt.show()
+        self.show_and_save(future_forecast)
 
         return future_forecast
