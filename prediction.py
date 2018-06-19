@@ -17,7 +17,6 @@ class Model:
 
     def fit(self):
         print('Size {}'.format(len(self.__data)))
-        print(self.__data)
         self.model = auto_arima(self.__data, start_p=1, start_q=1,
                                          max_p=3, max_q=3, m=12,
                                          start_P=0, seasonal=True,

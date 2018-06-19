@@ -26,7 +26,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         # limit for bandwidth, if over react
         self.threshold = 2000.00
-        self.training_size = 10
+        # for real case increment this number!!!!!
+        self.training_size = 15
         # perform a prediction every X packets(measures)
         self.freq_prediction = 20
         # forecast horizon
