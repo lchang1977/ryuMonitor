@@ -26,8 +26,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         # limit for bandwidth, if over react
         self.threshold = 2000.00
-        # for real case increment this number!!!!!
-        self.training_size = 15
+        self.max_training_size = 150
         # perform a prediction every X packets(measures)
         self.freq_prediction = 20
         # forecast horizon
@@ -174,7 +173,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
 
-        if len(self.bws[switch_id]) == self.training_size + 1:
+        if len(self.bws[switch_id]) == self.max_training_size + 1:
             self.bws[switch_id] = self.bws[switch_id].iloc[1:]
             # write on csv file all the elements
             self.bws[switch_id].to_csv('{}{}.csv'.format(self.filename, switch_id), sep=',')
