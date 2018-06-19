@@ -162,7 +162,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # do something!!!!!!
             print('Excessive load in the future')
 
-    def predict_and_react(self, switch_id):
+    def _predict_and_react(self, switch_id):
         prediction = self._predict_arima(self.bws[switch_id])
 
         # use the predicted values for changing routing
@@ -191,7 +191,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             print(self.bws[switch_id])
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._monitor, switch_id)
+            self.prediction_thread = hub.spawn(self._predict_and_react, switch_id)
 
 
 
