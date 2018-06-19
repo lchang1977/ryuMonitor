@@ -1,6 +1,9 @@
 from operator import attrgetter
 from arch import arch_model
 
+import matplotlib
+matplotlib.use('Agg')
+
 from ryu.app import simple_switch_13
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
@@ -159,6 +162,12 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # do something!!!!!!
             print('Excessive load in the future')
 
+    def predict_and_react(self, switch_id):
+        prediction = self._predict_arima(self.bws[switch_id])
+
+        # use the predicted values for changing routing
+        self.check_maximum(prediction)
+
     def __add_item(self, item, switch_id):
         self.bws[switch_id] = self.bws[switch_id].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
@@ -181,11 +190,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # to modify
             print(self.bws[switch_id])
 
-            # use ARIMA for predict
-            prediction = self._predict_arima(self.bws[switch_id])
-
-            # use the predicted values for changing routing
-            self.check_maximum(prediction)
+            # create a new thread for ARIMA prediction
+            self.prediction_thread = hub.spawn(self._monitor, switch_id)
 
 
 
