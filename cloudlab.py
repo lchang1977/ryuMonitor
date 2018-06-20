@@ -1,6 +1,7 @@
 import ryu.app.ofctl.api as api
 from ryu.base import app_manager
 from ryu.controller import ofp_event
+from ryu.controller.handler import set_ev_cls
 from ryu.controller.handler import MAIN_DISPATCHER
 
 
@@ -43,7 +44,7 @@ class Cloudlab(app_manager.RyuApp):
     def _flow_stats_reply_handler(self, ev):
         print('Handler')
         print(ev)
-            
+
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
