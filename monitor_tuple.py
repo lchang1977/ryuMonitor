@@ -12,6 +12,7 @@ from ryu.lib import hub
 
 from arima import Arima
 from prediction import Model
+from cloudlab import Cloudlab
 
 import matplotlib.pylab as plt
 import numpy as np
@@ -128,7 +129,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                 self.prev[key]['prev_tx'] = tx_bytes
 
                 if stat.port_no == self.interested_port:
-                    self.__add_item(rx_bw, datapath_id)
+                    self.__add_item(rx_bw, datapath_id, ev.msg.datapath)
 
     def _predict_var_gar(self, values):
 
@@ -157,18 +158,20 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         arima.fit()
         return arima.predict(self.forecast_size, self.time_interval)
 
-    def check_maximum(self, prediction):
+    def check_maximum(self, prediction, datapath):
         if max(prediction) > self.threshold:
             # do something!!!!!!
             print('Excessive load in the future')
+            cl = Cloudlab()
+            cl.move_to_ex(datapath)
 
-    def _predict_and_react(self, switch_id):
-        prediction = self._predict_arima(self.bws[switch_id])
+    def _predict_and_react(self, datapath):
+        prediction = self._predict_arima(self.bws[datapath.id])
 
         # use the predicted values for changing routing
-        self.check_maximum(prediction)
+        self.check_maximum(prediction, datapath)
 
-    def __add_item(self, item, switch_id):
+    def __add_item(self, item, switch_id, datapath):
         self.bws[switch_id] = self.bws[switch_id].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
@@ -191,7 +194,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             print(self.bws[switch_id])
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._predict_and_react, switch_id)
+            self.prediction_thread = hub.spawn(self._predict_and_react, datapath)
 
 
 
