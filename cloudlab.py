@@ -1,10 +1,13 @@
 import pandas as pd
 from pyramid.arima import auto_arima
 import ryu.app.ofctl.api as api
+from ryu.base import app_manager
 
-class Cloudlab:
 
-    def __init__(self):
+class Cloudlab(app_manager.RyuApp):
+
+    def __init__(self, *args, **kwargs):
+        super(Cloudlab, self).__init__(*args, **kwargs)
         self.__ips = {'10.11.10.1': '130.127.133.237',
                       '10.11.10.2': '130.127.134.16',
                       '10.11.10.3': '130.127.133.236',
