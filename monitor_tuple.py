@@ -160,17 +160,18 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         arima.fit()
         return arima.predict(self.forecast_size, self.time_interval)
 
-    def check_maximum(self, prediction, datapath):
+    def check_maximum(self, prediction, datapath, port):
         if max(prediction) > self.threshold:
             print('Excessive load in the future')
             cl = Cloudlab()
-            cl.change_interface(datapath, self.interested_port, self.last_flows)
+            cl.change_interface(datapath, port, self.last_flows)
 
-    def _predict_and_react(self, datapath, key):
+    def _predict_and_react(self, datapath, port):
+        key = (datapath.id, port)
         prediction = self._predict_arima(self.bws[key])
 
         # use the predicted values for changing routing
-        self.check_maximum(prediction, datapath)
+        self.check_maximum(prediction, datapath, port)
 
     def __add_item(self, item, switch_id, port, datapath):
         key = (switch_id, port)
