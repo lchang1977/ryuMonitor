@@ -22,28 +22,29 @@ class Cloudlab(app_manager.RyuApp):
         self.new_out_port = 'enp6s0f1'
         self.new_out_port = 3
         self.flows = []
+        self._parser = {}
+        self._datapath = {}
 
     def move_to_ex(self, datapath):
-
+        self._datapath = datapath
         ofproto = datapath.ofproto
-        parser = datapath.ofproto_parser
-        msg = parser.OFPTableStatsRequest(datapath)
-        reply = api.send_msg(self, msg,
-                             reply_cls=parser.OFPTableStatsReply,
-                             reply_multi=True)
+        self._parser = datapath.ofproto_parser
+        req = self._parser.OFPFlowStatsRequest(datapath)
+        datapath.send_msg(req)
+
         print('Sent request')
-        print(reply)
-        actions = [parser.OFPActionOutput(self.new_out_port)]
 
-        for flow in self.flows:
-            if flow.action == parser.OFPActionOutput(1):
-                match = parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
-                self._add_flow(datapath, 1, match, actions)
-
-    @set_ev_cls(ofp_event.EventOFPTableStatsReply, MAIN_DISPATCHER)
+    @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _flow_stats_reply_handler(self, ev):
+
+        body = ev.msg.body
         print('Handler')
-        print(ev)
+        actions = [self._parser.OFPActionOutput(self.new_out_port)]
+
+        for flow in body:
+            if flow.action == self._parser.OFPActionOutput(1):
+                match = self._parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
+                self._add_flow(self._datapath, 1, match, actions)
 
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
