@@ -80,8 +80,8 @@
       <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloudlab.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="482">
-              <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
+            <state relative-caret-position="317">
+              <caret line="47" column="67" lean-forward="true" selection-start-line="47" selection-start-column="67" selection-end-line="47" selection-end-column="67" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -543,7 +543,21 @@
       <option name="project" value="LOCAL" />
       <updated>1529589843555</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Delete previous flow">
+      <created>1529592676674</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1529592676674</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Unused method">
+      <created>1529592711916</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1529592711916</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TodoView">
@@ -590,8 +604,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="New print" />
-    <MESSAGE value="Bug fixed" />
     <MESSAGE value="Bug fixes" />
     <MESSAGE value="No print" />
     <MESSAGE value="Tuning parameters" />
@@ -615,7 +627,9 @@
     <MESSAGE value="Bug in key dict" />
     <MESSAGE value="Port as param" />
     <MESSAGE value="Bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fix" />
+    <MESSAGE value="Delete previous flow" />
+    <MESSAGE value="Unused method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Unused method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -816,8 +830,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudlab.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="482">
-          <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
+        <state relative-caret-position="317">
+          <caret line="47" column="67" lean-forward="true" selection-start-line="47" selection-start-column="67" selection-end-line="47" selection-end-column="67" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

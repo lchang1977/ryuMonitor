@@ -56,7 +56,7 @@ class Cloudlab(app_manager.RyuApp):
         """Create OFP flow mod message to remove flows from table."""
         ofproto = datapath.ofproto
         # Delete the flow
-        flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=dp, command=ofproto.OFPFC_DELETE,
+        flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=datapath, command=ofproto.OFPFC_DELETE,
                                 out_port=out_port, out_group=ofproto.OFPG_ANY,
                                 match=match)
 
