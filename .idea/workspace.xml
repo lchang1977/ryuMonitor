@@ -80,8 +80,8 @@
       <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloudlab.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="47" column="67" lean-forward="true" selection-start-line="47" selection-start-column="67" selection-end-line="47" selection-end-column="67" />
+            <state relative-caret-position="527">
+              <caret line="60" column="54" selection-start-line="60" selection-start-column="54" selection-end-line="60" selection-end-column="54" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -557,7 +557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1529592711916</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Bug fix">
+      <created>1529592851853</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1529592851853</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView">
@@ -626,10 +633,10 @@
     <MESSAGE value="Initialize dict" />
     <MESSAGE value="Bug in key dict" />
     <MESSAGE value="Port as param" />
-    <MESSAGE value="Bug fix" />
     <MESSAGE value="Delete previous flow" />
     <MESSAGE value="Unused method" />
-    <option name="LAST_COMMIT_MESSAGE" value="Unused method" />
+    <MESSAGE value="Bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -830,8 +837,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudlab.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="47" column="67" lean-forward="true" selection-start-line="47" selection-start-column="67" selection-end-line="47" selection-end-column="67" />
+        <state relative-caret-position="527">
+          <caret line="60" column="54" selection-start-line="60" selection-start-column="54" selection-end-line="60" selection-end-column="54" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

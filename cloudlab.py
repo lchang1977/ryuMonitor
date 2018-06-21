@@ -57,7 +57,7 @@ class Cloudlab(app_manager.RyuApp):
         ofproto = datapath.ofproto
         # Delete the flow
         flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=datapath, command=ofproto.OFPFC_DELETE,
-                                out_port=out_port, out_group=ofproto.OFPG_ANY,
-                                match=match)
+                                                      out_port=out_port, out_group=ofproto.OFPG_ANY,
+                                                      match=match)
 
-        return flow_mod
+        datapath.send_msg(flow_mod)
