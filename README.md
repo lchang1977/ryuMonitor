@@ -66,10 +66,10 @@ sudo ovs-vsctl set-controller br-flat-lan-1 tcp:<Controller_IP>:5555
 sudo ovs-appctl fdb/show
 
 #see mapping of OpenFlow ports to system ports
-sudo ovs-ofctl show mybridge
+sudo ovs-ofctl show <mybridge>
 
 #see flow entries (OpenFlow) on mybridge
-sudo ovs-ofctl dump-flows mybridge
+sudo ovs-ofctl dump-flows <mybridge>
 
 #see records in ovsdb-server tables
 sudo ovs-vsctl list Bridge
