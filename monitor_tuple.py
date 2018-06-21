@@ -166,8 +166,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             cl = Cloudlab()
             cl.change_interface(datapath, self.interested_port, self.last_flows)
 
-    def _predict_and_react(self, datapath):
-        prediction = self._predict_arima(self.bws[datapath.id])
+    def _predict_and_react(self, datapath, key):
+        prediction = self._predict_arima(self.bws[key])
 
         # use the predicted values for changing routing
         self.check_maximum(prediction, datapath)
@@ -192,7 +192,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             self.num_measure = 0
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._predict_and_react, datapath)
+            self.prediction_thread = hub.spawn(self._predict_and_react, datapath, key)
 
 
 
