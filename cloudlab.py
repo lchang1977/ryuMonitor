@@ -17,17 +17,16 @@ class Cloudlab(app_manager.RyuApp):
                        '3c:fd:fe:55:f4:62': '3c:fd:fe:55:f4:60',
                        '3c:fd:fe:55:fd:c2': '3c:fd:fe:55:f4:60',
                        '3c:fd:fe:55:fe:62': '3c:fd:fe:55:fe:60'}
-        self.__datapaths = []
         # In this case we are using a new physical port
         self.new_out_port = 'enp6s0f1'
         self.new_out_port = 3
-        self.flows = []
-        self._parser = {}
-        self._datapath = {}
+        self.old_port = None
+        self._parser = None
+        self._datapath = None
 
-    def move_to_ex(self, datapath):
+    def change_interface(self, datapath, old_port):
         self._datapath = datapath
-        ofproto = datapath.ofproto
+        self.old_port = old_port
         self._parser = datapath.ofproto_parser
         req = self._parser.OFPFlowStatsRequest(datapath)
         datapath.send_msg(req)
@@ -44,7 +43,7 @@ class Cloudlab(app_manager.RyuApp):
         for flow in body:
             if flow.action == self._parser.OFPActionOutput(1):
                 match = self._parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
-                self._add_flow(self._datapath, 1, match, actions)
+                self._add_flow(self._datapath, 2, match, actions)
 
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
@@ -60,5 +59,3 @@ class Cloudlab(app_manager.RyuApp):
             mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                     match=match, instructions=inst)
         datapath.send_msg(mod)
-
-
