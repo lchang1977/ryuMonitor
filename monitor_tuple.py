@@ -193,7 +193,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             self.num_measure = 0
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._predict_and_react, datapath, key)
+            self.prediction_thread = hub.spawn(self._predict_and_react, datapath, port)
 
 
 
