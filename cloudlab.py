@@ -29,6 +29,8 @@ class Cloudlab(app_manager.RyuApp):
 
         actions = [self._parser.OFPActionOutput(self.new_out_port)]
 
+        print(old_flows)
+        
         for flow in old_flows:
             if flow.instructions[0].actions[0].port == old_port:
                 match = self._parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
