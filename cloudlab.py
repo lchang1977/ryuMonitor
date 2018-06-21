@@ -22,6 +22,8 @@ class Cloudlab(app_manager.RyuApp):
         self._datapath = datapath
         self._parser = datapath.ofproto_parser
         new_out_port = self._get_new_port(old_port)
+        
+        print('Moving from {} to {}'.format(old_port, new_out_port))
 
         actions = [self._parser.OFPActionOutput(new_out_port)]
 
