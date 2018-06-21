@@ -29,11 +29,13 @@ class Cloudlab(app_manager.RyuApp):
 
         actions = [self._parser.OFPActionOutput(self.new_out_port)]
 
-        print(old_flows)
-        
-        for flow in old_flows:
-            if flow.instructions[0].actions[0].port == old_port:
-                match = self._parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
+        for rule in sorted([flow for flow in old_flows if flow.priority == 1],
+                           key=lambda flow: (flow.match['in_port'],
+                                             flow.match['eth_dst'])):
+            if rule.instructions[0].actions[0].port == old_port:
+                match = self._parser.OFPMatch(in_port=rule.match['in_port'],
+                                              eth_dst=rule.match['eth_dst'],
+                                              eth_src=rule.match['eth_src'])
                 self._add_flow(self._datapath, 2, match, actions)
 
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
