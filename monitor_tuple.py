@@ -185,7 +185,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             self.bws[key].to_csv('{}-{}-{}.csv'.format(self.filename, switch_id, port), sep=',')
         else:
             self.bws[key][-1:].to_csv('{}-{}-{}.csv'.format(self.filename, switch_id, port),
-                                            mode='a', header=False, sep=',')
+                                      mode='a', header=False, sep=',')
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
@@ -194,6 +194,3 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
             # create a new thread for ARIMA prediction
             self.prediction_thread = hub.spawn(self._predict_and_react, datapath, port)
-
-
-
