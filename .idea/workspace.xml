@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="abcc2f60-2952-4901-af9d-5a48e5a34482" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloudlab.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloudlab.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -220,13 +219,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528467836700</updated>
-    </task>
-    <task id="LOCAL-00004" summary="test">
-      <created>1528813129725</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1528813129725</updated>
     </task>
     <task id="LOCAL-00005" summary="comment out">
       <created>1528814191981</created>
@@ -564,7 +556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1529594744568</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="New rule">
+      <created>1529597635439</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1529597635439</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TodoView">
@@ -611,7 +610,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Save graph" />
     <MESSAGE value="Modification for server" />
     <MESSAGE value="Wrong name" />
     <MESSAGE value="New training size" />
@@ -636,7 +634,8 @@
     <MESSAGE value="Send packet" />
     <MESSAGE value="Better design" />
     <MESSAGE value="Waring fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Waring fix" />
+    <MESSAGE value="New rule" />
+    <option name="LAST_COMMIT_MESSAGE" value="New rule" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

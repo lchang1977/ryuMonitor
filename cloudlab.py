@@ -34,7 +34,7 @@ class Cloudlab(app_manager.RyuApp):
                                               eth_src=rule.match['eth_src'])
                 self._add_flow(3, match, actions)
                 self._remove_flows(match, old_port)
-            elif rule.stat.match['in_port'] == old_port:
+            elif rule.match['in_port'] == old_port:
                 old_actions = rule.instructions[0].actions
                 old_match = self._parser.OFPMatch(in_port=rule.match['in_port'],
                                                   eth_dst=rule.match['eth_dst'],
