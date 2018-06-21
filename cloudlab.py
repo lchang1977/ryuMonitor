@@ -15,17 +15,15 @@ class Cloudlab(app_manager.RyuApp):
                        '3c:fd:fe:55:f4:62': '3c:fd:fe:55:f4:60',
                        '3c:fd:fe:55:fd:c2': '3c:fd:fe:55:f4:60',
                        '3c:fd:fe:55:fe:62': '3c:fd:fe:55:fe:60'}
-        # In this case we are using a new physical port
-        self.new_out_port = 'enp6s0f1'
-        self.new_out_port = 3
         self._parser = None
         self._datapath = None
 
     def change_interface(self, datapath, old_port, old_flows):
         self._datapath = datapath
         self._parser = datapath.ofproto_parser
+        new_out_port = self._get_new_port(old_port)
 
-        actions = [self._parser.OFPActionOutput(self.new_out_port)]
+        actions = [self._parser.OFPActionOutput(new_out_port)]
 
         for rule in sorted([flow for flow in old_flows if flow.priority == 1],
                            key=lambda flow: (flow.match['in_port'],
@@ -34,30 +32,40 @@ class Cloudlab(app_manager.RyuApp):
                 match = self._parser.OFPMatch(in_port=rule.match['in_port'],
                                               eth_dst=rule.match['eth_dst'],
                                               eth_src=rule.match['eth_src'])
-                self._add_flow(self._datapath, 3, match, actions)
-                self._remove_flows(self._datapath, match, old_port)
+                self._add_flow(3, match, actions)
+                self._remove_flows(match, old_port)
 
-    def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
-        ofproto = datapath.ofproto
-        parser = datapath.ofproto_parser
+    def _get_new_port(self, old_port):
+        # In this case we are using a new physical port of switch
 
-        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,
-                                             actions)]
-        if buffer_id:
-            mod = parser.OFPFlowMod(datapath=datapath, buffer_id=buffer_id,
-                                    priority=priority, match=match,
-                                    instructions=inst)
+        # Switching between enp6s0f1 and enp6s0f0
+        if old_port == 1:
+            new_port = 3
         else:
-            mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
-                                    match=match, instructions=inst)
-        datapath.send_msg(mod)
+            new_port = 1
 
-    def _remove_flows(self, datapath, match, out_port):
+        return new_port
+
+    def _add_flow(self, priority, match, actions, buffer_id=None):
+        ofproto = self._datapath.ofproto
+
+        inst = [self._parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+
+        if buffer_id:
+            mod = self._parser.OFPFlowMod(datapath=self._datapath, buffer_id=buffer_id,
+                                          priority=priority, match=match,
+                                          instructions=inst)
+        else:
+            mod = self._parser.OFPFlowMod(datapath=self._datapath, priority=priority,
+                                          match=match, instructions=inst)
+        self._datapath.send_msg(mod)
+
+    def _remove_flows(self, match, out_port):
         """Create OFP flow mod message to remove flows from table."""
-        ofproto = datapath.ofproto
+        ofproto = self._datapath.ofproto
         # Delete the flow
-        flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=datapath, command=ofproto.OFPFC_DELETE,
-                                                      out_port=out_port, out_group=ofproto.OFPG_ANY,
-                                                      match=match)
+        flow_mod = self._datapath.ofproto_parser.OFPFlowMod(datapath=self._datapath, command=ofproto.OFPFC_DELETE,
+                                                            out_port=out_port, out_group=ofproto.OFPG_ANY,
+                                                            match=match)
 
-        datapath.send_msg(flow_mod)
+        self._datapath.send_msg(flow_mod)
