@@ -1,8 +1,6 @@
 import ryu.app.ofctl.api as api
 from ryu.base import app_manager
-from ryu.controller import ofp_event
-from ryu.controller.handler import set_ev_cls
-from ryu.controller.handler import MAIN_DISPATCHER
+from ryu.ofproto.ofproto_v1_2 import OFPG_ANY
 
 
 class Cloudlab(app_manager.RyuApp):
@@ -36,7 +34,7 @@ class Cloudlab(app_manager.RyuApp):
                 match = self._parser.OFPMatch(in_port=rule.match['in_port'],
                                               eth_dst=rule.match['eth_dst'],
                                               eth_src=rule.match['eth_src'])
-                self._add_flow(self._datapath, 2, match, actions)
+                self._add_flow(self._datapath, 3, match, actions)
 
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
@@ -52,3 +50,19 @@ class Cloudlab(app_manager.RyuApp):
             mod = parser.OFPFlowMod(datapath=datapath, priority=priority,
                                     match=match, instructions=inst)
         datapath.send_msg(mod)
+
+    def remove_previous(self, ofproto, parser):
+
+        match = parser.OFPMatch(in_port=1, eth_src="aa:aa:aa:aa:aa:aa", eth_dst="bb:bb:bb:bb:bb:bb")
+        actions = [parser.OFPActionOutput(2)]
+        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+
+    def remove_table_flows(self, datapath, table_id, match, instructions):
+        """Create OFP flow mod message to remove flows from table."""
+        ofproto = datapath.ofproto
+        # Delete the flow
+        flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=dp, command=ofproto.OFPFC_DELETE,
+                                out_port=ofproto.OFPP_ANY, out_group=ofproto.OFPG_ANY,
+                                match=match)
+
+        return flow_mod

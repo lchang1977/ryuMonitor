@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from arima import Arima
 from prediction import Model
 
+import csv
 import datetime
 
 data1 = pd.read_csv("electric_Production.csv", index_col=0)

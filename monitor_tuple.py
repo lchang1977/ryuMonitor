@@ -183,9 +183,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # write on csv file all the elements
             self.bws[switch_id].to_csv('{}{}.csv'.format(self.filename, switch_id), sep=',')
         else:
-            with open('{}{}.csv'.format(self.filename, switch_id), 'a') as f:
-                writer = csv.writer(f)
-                writer.writerow(self.bws[switch_id].iloc[-1])
+            self.bws[switch_id][-1:].to_csv('{}{}.csv'.format(self.filename, switch_id),
+                                            mode='a', header=False, sep=',')
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
