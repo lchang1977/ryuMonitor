@@ -33,8 +33,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
-        self.interested_port = 1
-        self.filename = 'bandwidth-'
+        self.interested_port = [1]
+        self.filename = 'bandwidth'
         self.last_flows = None
         # perform request to switch every X second
         self.time_interval = 1
@@ -130,8 +130,8 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
 
-                if stat.port_no == self.interested_port:
-                    self.__add_item(rx_bw, datapath_id, ev.msg.datapath)
+                if stat.port_no in self.interested_port:
+                    self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
 
     def _predict_var_gar(self, values):
 
@@ -162,7 +162,6 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
     def check_maximum(self, prediction, datapath):
         if max(prediction) > self.threshold:
-            # do something!!!!!!
             print('Excessive load in the future')
             cl = Cloudlab()
             cl.change_interface(datapath, self.interested_port, self.last_flows)
@@ -173,26 +172,24 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # use the predicted values for changing routing
         self.check_maximum(prediction, datapath)
 
-    def __add_item(self, item, switch_id, datapath):
-        self.bws[switch_id] = self.bws[switch_id].append(
+    def __add_item(self, item, switch_id, port, datapath):
+        key = (switch_id, port)
+        self.bws[key] = self.bws[key].append(
             pd.DataFrame(data=[item], index=[datetime.datetime.now()], columns=['BW'])
         )
 
-        if len(self.bws[switch_id]) == self.max_training_size + 1:
-            self.bws[switch_id] = self.bws[switch_id].iloc[1:]
+        if len(self.bws[key]) == self.max_training_size + 1:
+            self.bws[key] = self.bws[key].iloc[1:]
             # write on csv file all the elements
-            self.bws[switch_id].to_csv('{}{}.csv'.format(self.filename, switch_id), sep=',')
+            self.bws[key].to_csv('{}-{}-{}.csv'.format(self.filename, switch_id, port), sep=',')
         else:
-            self.bws[switch_id][-1:].to_csv('{}{}.csv'.format(self.filename, switch_id),
+            self.bws[key][-1:].to_csv('{}-{}-{}.csv'.format(self.filename, switch_id, port),
                                             mode='a', header=False, sep=',')
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
         if self.num_measure == self.freq_prediction:
             self.num_measure = 0
-
-            # to modify
-            print(self.bws[switch_id])
 
             # create a new thread for ARIMA prediction
             self.prediction_thread = hub.spawn(self._predict_and_react, datapath)
