@@ -34,6 +34,16 @@ class Cloudlab(app_manager.RyuApp):
                                               eth_src=rule.match['eth_src'])
                 self._add_flow(3, match, actions)
                 self._remove_flows(match, old_port)
+            elif rule.stat.match['in_port'] == old_port:
+                old_actions = rule.instructions[0].actions
+                old_match = self._parser.OFPMatch(in_port=rule.match['in_port'],
+                                                  eth_dst=rule.match['eth_dst'],
+                                                  eth_src=rule.match['eth_src'])
+                new_match = self._parser.OFPMatch(in_port=new_out_port,
+                                                  eth_dst=rule.match['eth_dst'],
+                                                  eth_src=rule.match['eth_src'])
+                self._add_flow(3, new_match, old_actions)
+                self._remove_flows(old_match)
 
     def _get_new_port(self, old_port):
         # In this case we are using a new physical port of switch
@@ -60,12 +70,17 @@ class Cloudlab(app_manager.RyuApp):
                                           match=match, instructions=inst)
         self._datapath.send_msg(mod)
 
-    def _remove_flows(self, match, out_port):
+    def _remove_flows(self, match, out_port=None):
         """Create OFP flow mod message to remove flows from table."""
         ofproto = self._datapath.ofproto
         # Delete the flow
-        flow_mod = self._datapath.ofproto_parser.OFPFlowMod(datapath=self._datapath, command=ofproto.OFPFC_DELETE,
-                                                            out_port=out_port, out_group=ofproto.OFPG_ANY,
-                                                            match=match)
+        if out_port:
+            flow_mod = self._datapath.ofproto_parser.OFPFlowMod(datapath=self._datapath, command=ofproto.OFPFC_DELETE,
+                                                                out_port=out_port, out_group=ofproto.OFPG_ANY,
+                                                                match=match)
+        else:
+            flow_mod = self._datapath.ofproto_parser.OFPFlowMod(datapath=self._datapath, command=ofproto.OFPFC_DELETE,
+                                                                out_port=ofproto.OFPP_ANY, out_group=ofproto.OFPG_ANY,
+                                                                match=match)
 
         self._datapath.send_msg(flow_mod)

@@ -32,8 +32,8 @@
       <file leaf-file-name="prediction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prediction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="450">
+              <caret line="30" column="34" lean-forward="true" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -56,8 +56,8 @@
       <file leaf-file-name="monitor_tuple.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="166" column="42" lean-forward="true" selection-start-line="166" selection-start-column="42" selection-end-line="166" selection-end-column="42" />
+            <state relative-caret-position="300">
+              <caret line="92" column="60" lean-forward="true" selection-start-line="92" selection-start-column="29" selection-end-line="92" selection-end-column="60" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -80,8 +80,8 @@
       <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloudlab.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
-              <caret line="64" column="40" lean-forward="true" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
+            <state relative-caret-position="465">
+              <caret line="31" column="59" lean-forward="true" selection-start-line="31" selection-start-column="59" selection-end-line="31" selection-end-column="59" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -106,8 +106,8 @@
       <find>training_size</find>
       <find>datapaths</find>
       <find>interested_port</find>
-      <find>flow</find>
       <find>bws</find>
+      <find>flow</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -220,20 +220,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528467836700</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Perform prediction">
-      <created>1528810482489</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1528810482489</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Removed unused import">
-      <created>1528812830069</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1528812830069</updated>
     </task>
     <task id="LOCAL-00004" summary="test">
       <created>1528813129725</created>
@@ -564,7 +550,21 @@
       <option name="project" value="LOCAL" />
       <updated>1529593210269</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Better design">
+      <created>1529594548809</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1529594548810</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Waring fix">
+      <created>1529594744568</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1529594744568</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TodoView">
@@ -577,7 +577,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1175" extended-state="6" />
+    <frame x="67" y="25" width="1853" height="1175" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
@@ -611,8 +611,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="No print" />
-    <MESSAGE value="Tuning parameters" />
     <MESSAGE value="Save graph" />
     <MESSAGE value="Modification for server" />
     <MESSAGE value="Wrong name" />
@@ -636,7 +634,9 @@
     <MESSAGE value="Unused method" />
     <MESSAGE value="Bug fix" />
     <MESSAGE value="Send packet" />
-    <option name="LAST_COMMIT_MESSAGE" value="Send packet" />
+    <MESSAGE value="Better design" />
+    <MESSAGE value="Waring fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Waring fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -807,8 +807,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/prediction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="450">
+          <caret line="30" column="34" lean-forward="true" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -827,8 +827,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="166" column="42" lean-forward="true" selection-start-line="166" selection-start-column="42" selection-end-line="166" selection-end-column="42" />
+        <state relative-caret-position="300">
+          <caret line="92" column="60" lean-forward="true" selection-start-line="92" selection-start-column="29" selection-end-line="92" selection-end-column="60" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -837,8 +837,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudlab.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="64" column="40" lean-forward="true" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
+        <state relative-caret-position="465">
+          <caret line="31" column="59" lean-forward="true" selection-start-line="31" selection-start-column="59" selection-end-line="31" selection-end-column="59" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
