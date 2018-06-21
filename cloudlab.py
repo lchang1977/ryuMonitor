@@ -52,12 +52,6 @@ class Cloudlab(app_manager.RyuApp):
                                     match=match, instructions=inst)
         datapath.send_msg(mod)
 
-    def remove_previous(self, ofproto, parser):
-
-        match = parser.OFPMatch(in_port=1, eth_src="aa:aa:aa:aa:aa:aa", eth_dst="bb:bb:bb:bb:bb:bb")
-        actions = [parser.OFPActionOutput(2)]
-        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
-
     def _remove_flows(self, datapath, match, out_port):
         """Create OFP flow mod message to remove flows from table."""
         ofproto = datapath.ofproto
