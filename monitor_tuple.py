@@ -35,6 +35,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.num_measure = 0
         self.interested_port = 1
         self.filename = 'bandwidth-'
+        self.last_flows = None
         # perform request to switch every X second
         self.time_interval = 1
         self.bws = {}
@@ -75,6 +76,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _flow_stats_reply_handler(self, ev):
         body = ev.msg.body
+        self.last_flows = body
 
         self.logger.info('datapath         '
                          'in-port  eth-dst           '
@@ -163,7 +165,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # do something!!!!!!
             print('Excessive load in the future')
             cl = Cloudlab()
-            cl.change_interface(datapath, self.interested_port)
+            cl.change_interface(datapath, self.interested_port, self.last_flows)
 
     def _predict_and_react(self, datapath):
         prediction = self._predict_arima(self.bws[datapath.id])

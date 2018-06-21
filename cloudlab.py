@@ -20,32 +20,17 @@ class Cloudlab(app_manager.RyuApp):
         # In this case we are using a new physical port
         self.new_out_port = 'enp6s0f1'
         self.new_out_port = 3
-        self.old_port = None
         self._parser = None
         self._datapath = None
 
-    def change_interface(self, datapath, old_port):
+    def change_interface(self, datapath, old_port, old_flows):
         self._datapath = datapath
-        self.old_port = old_port
         self._parser = datapath.ofproto_parser
-        req = self._parser.OFPFlowStatsRequest(datapath)
-        result = api.send_msg(
-            self, req,
-            reply_cls=self._parser.OFPFlowStatsReply,
-            reply_multi=True)
-        #datapath.send_msg(req)
-        print('Sent request')
-        print(result)
-        
-    @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
-    def _flow_stats_reply_handler(self, ev):
 
-        body = ev.msg.body
-        print('Handler')
         actions = [self._parser.OFPActionOutput(self.new_out_port)]
 
-        for flow in body:
-            if flow.action == self._parser.OFPActionOutput(1):
+        for flow in old_flows:
+            if flow.action == self._parser.OFPActionOutput(old_port):
                 match = self._parser.OFPMatch(in_port=flow.in_port, eth_dst=flow.dst, eth_src=flow.src)
                 self._add_flow(self._datapath, 2, match, actions)
 
