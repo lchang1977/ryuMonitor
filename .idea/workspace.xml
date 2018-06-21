@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="abcc2f60-2952-4901-af9d-5a48e5a34482" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloudlab.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloudlab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitor_tuple.py" beforeDir="false" afterPath="$PROJECT_DIR$/monitor_tuple.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -62,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="monitor_tuple.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="monitor_tuple.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="74" column="35" lean-forward="true" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
+            <state relative-caret-position="390">
+              <caret line="161" column="44" lean-forward="true" selection-start-line="161" selection-start-column="44" selection-end-line="161" selection-end-column="44" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -86,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloudlab.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="390">
+              <caret line="26" column="24" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="24" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -127,8 +127,8 @@
         <option value="$PROJECT_DIR$/arima.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/prediction.py" />
-        <option value="$PROJECT_DIR$/monitor_tuple.py" />
         <option value="$PROJECT_DIR$/cloudlab.py" />
+        <option value="$PROJECT_DIR$/monitor_tuple.py" />
       </list>
     </option>
   </component>
@@ -458,7 +458,14 @@
       <option name="project" value="LOCAL" />
       <updated>1529564545428</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="New instance variable">
+      <created>1529566422046</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1529566422046</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TodoView">
@@ -505,7 +512,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="comment out" />
     <MESSAGE value="New way for writing" />
     <MESSAGE value="Data for multiple switches" />
     <MESSAGE value="New initialization" />
@@ -530,7 +536,8 @@
     <MESSAGE value="Add handler" />
     <MESSAGE value="Add import" />
     <MESSAGE value="Flow handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Flow handler" />
+    <MESSAGE value="New instance variable" />
+    <option name="LAST_COMMIT_MESSAGE" value="New instance variable" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -700,16 +707,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="74" column="35" lean-forward="true" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.local/lib/python3.6/site-packages/ryu/app/simple_switch_13.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-223">
@@ -722,8 +719,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudlab.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="390">
+          <caret line="26" column="24" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/monitor_tuple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="161" column="44" lean-forward="true" selection-start-line="161" selection-start-column="44" selection-end-line="161" selection-end-column="44" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

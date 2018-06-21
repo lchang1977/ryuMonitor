@@ -163,7 +163,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             # do something!!!!!!
             print('Excessive load in the future')
             cl = Cloudlab()
-            cl.move_to_ex(datapath)
+            cl.change_interface(datapath, self.interested_port)
 
     def _predict_and_react(self, datapath):
         prediction = self._predict_arima(self.bws[datapath.id])
