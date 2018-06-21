@@ -29,10 +29,14 @@ class Cloudlab(app_manager.RyuApp):
         self.old_port = old_port
         self._parser = datapath.ofproto_parser
         req = self._parser.OFPFlowStatsRequest(datapath)
-        datapath.send_msg(req)
-
+        result = api.send_msg(
+            self, req,
+            reply_cls=self._parser.OFPFlowStatsReply,
+            reply_multi=True)
+        #datapath.send_msg(req)
         print('Sent request')
-
+        print(result)
+        
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _flow_stats_reply_handler(self, ev):
 
