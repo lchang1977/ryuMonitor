@@ -35,6 +35,7 @@ class Cloudlab(app_manager.RyuApp):
                                               eth_dst=rule.match['eth_dst'],
                                               eth_src=rule.match['eth_src'])
                 self._add_flow(self._datapath, 3, match, actions)
+                self._remove_flows(self._datapath, match, old_port)
 
     def _add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
@@ -57,12 +58,12 @@ class Cloudlab(app_manager.RyuApp):
         actions = [parser.OFPActionOutput(2)]
         inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
 
-    def remove_table_flows(self, datapath, table_id, match, instructions):
+    def _remove_flows(self, datapath, match, out_port):
         """Create OFP flow mod message to remove flows from table."""
         ofproto = datapath.ofproto
         # Delete the flow
         flow_mod = datapath.ofproto_parser.OFPFlowMod(datapath=dp, command=ofproto.OFPFC_DELETE,
-                                out_port=ofproto.OFPP_ANY, out_group=ofproto.OFPG_ANY,
+                                out_port=out_port, out_group=ofproto.OFPG_ANY,
                                 match=match)
 
         return flow_mod
