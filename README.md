@@ -83,5 +83,5 @@ The commands assume tou have already set *ctl* as the IP of the Controller node,
 sudo ovs-vsctl del-port <mybridge> <port_name>
 
 #add port <port_name> to <mybridge>
-sudo ovs-vsctl add-port <mybridge><port_name>
+sudo ovs-vsctl add-port <mybridge> <port_name>
 ```
