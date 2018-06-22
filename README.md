@@ -77,3 +77,11 @@ sudo ovs-vsctl list Port
 sudo ovs-vsctl list Interface
 ```
 The commands assume tou have already set *ctl* as the IP of the Controller node, while *br-flat-lan-1* is the OVS bridge name.
+
+```
+#delete port <port_name> from <mybridge>
+sudo ovs-vsctl del-port <mybridge> <port_name>
+
+#add port <port_name> to <mybridge>
+sudo ovs-vsctl add-port <mybridge><port_name>
+```
