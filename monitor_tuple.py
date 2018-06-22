@@ -5,12 +5,14 @@ import matplotlib
 matplotlib.use('Agg')
 
 from ryu.app import simple_switch_13
+from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
 from arima import Arima
+from setup import OVS_lan_type
 from prediction import Model
 from cloudlab import Cloudlab
 
@@ -21,7 +23,7 @@ import datetime
 import csv
 
 
-class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
+class SimpleMonitor13(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
@@ -42,6 +44,14 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         self.datapaths = {}
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
+        self.switch_type = OVS_lan_type()
+        # initialize switch flows, change if different network topology
+        self.initialize_br_flat()
+
+    def initialize_br_flat(self):
+
+        for dp in self.datapaths.values():
+            self.switch_type.initialize(dp)
 
     @set_ev_cls(ofp_event.EventOFPStateChange,
                 [MAIN_DISPATCHER, DEAD_DISPATCHER])
@@ -194,3 +204,6 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
 
             # create a new thread for ARIMA prediction
             self.prediction_thread = hub.spawn(self._predict_and_react, datapath, port)
+
+
+

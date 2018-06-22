@@ -1,6 +1,7 @@
 import ryu.app.ofctl.api as api
 from ryu.base import app_manager
 from ryu.ofproto.ofproto_v1_2 import OFPG_ANY
+from itertools import cycle
 
 
 class Cloudlab(app_manager.RyuApp):
@@ -17,12 +18,19 @@ class Cloudlab(app_manager.RyuApp):
                        '3c:fd:fe:55:fe:62': '3c:fd:fe:55:fe:60'}
         self._parser = None
         self._datapath = None
+        self._old_port = 1
+        self._new_port = 3
+        self._local = 'LOCAL'
+        self._portIterator = cycle([self._old_port, self._new_port])
+
+        # get old, so for next request start from new
+        self._get_new_port()
 
     def change_interface(self, datapath, old_port, old_flows):
         self._datapath = datapath
         self._parser = datapath.ofproto_parser
         new_out_port = self._get_new_port(old_port)
-        
+
         print('Moving from {} to {}'.format(old_port, new_out_port))
 
         actions = [self._parser.OFPActionOutput(new_out_port)]
@@ -48,15 +56,14 @@ class Cloudlab(app_manager.RyuApp):
                 self._remove_flows(old_match)
 
     def _get_new_port(self, old_port):
-        # In this case we are using a new physical port of switch
+        # Prime the pump
+        notFound = True
 
-        # Switching between enp6s0f1 and enp6s0f0
-        if old_port == 1:
-            new_port = 3
-        else:
-            new_port = 1
-
-        return new_port
+        nextelem = next(self._portIterator)
+        while notFound:
+            thiselem, nextelem = nextelem, next(self._portIterator)
+            if thiselem == old_port:
+                return nextelem
 
     def _add_flow(self, priority, match, actions, buffer_id=None):
         ofproto = self._datapath.ofproto
