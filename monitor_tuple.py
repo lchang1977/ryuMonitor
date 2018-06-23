@@ -15,13 +15,13 @@ from arima import Arima
 from setup import OVS_lan_type
 from prediction import Model
 from cloudlab import Cloudlab
+from config_reader import Reader
 
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
 import datetime
 import csv
-import configparser
 
 
 class SimpleMonitor13(app_manager.RyuApp):
@@ -49,8 +49,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         # initialize switch flows, change if different network topology
         self.initialize_br_flat()
         # read config file
-        self.config = configparser.ConfigParser()
-        self.config.read('config.ini')
+        self.config = Reader()
 
     def initialize_br_flat(self):
 
@@ -170,7 +169,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
     def _predict_arima(self, values):
 
-        arima = Model(values, self.config.getboolean('DEFAULT', 'compareAIC'))
+        arima = Model(values, self.config.save_aic())
         arima.fit()
         return arima.predict(self.forecast_size, self.time_interval)
 
@@ -197,7 +196,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
     def _predict(self, datapath, port):
         # read file for next method
-        if self.config.getboolean('DEFAULT', 'react'):
+        if self.config.react():
             self._predict_and_react(datapath, port)
         else:
             self._predict_and_save(datapath, port)

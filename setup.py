@@ -7,7 +7,6 @@ class OVS_lan_type(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(OVS_lan_type, self).__init__(*args, **kwargs)
         self._old_port = 1
-        self._new_port = 3
         self._local = 'LOCAL'
 
     def initialize(self, datapath):
