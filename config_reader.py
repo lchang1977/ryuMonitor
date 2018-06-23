@@ -1,6 +1,5 @@
 import configparser
 
-
 class Reader:
 
     def __init__(self):
@@ -14,7 +13,7 @@ class Reader:
         return self.config.getboolean('DEFAULT', 'compareAIC')
 
     def old_port(self):
-        return 1
+        return self.config.get('OVS', 'old_port')
 
     def new_port(self):
-        return 3
+        return self.config.get('OVS', 'new_port')
