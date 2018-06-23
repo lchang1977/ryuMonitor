@@ -183,6 +183,14 @@ class SimpleMonitor13(app_manager.RyuApp):
         # use the predicted values for changing routing
         self.check_maximum(prediction, datapath, port)
 
+    def _predict_and_save(self, datapath, port):
+        key = (datapath.id, port)
+        prediction = self._predict_arima(self.bws[key])
+        first_ts = prediction.index[1]
+
+        # save on file the predicted values
+        prediction.to_csv('prediction-{}-{}-{}.csv'.format(first_ts, datapath.id, port), sep=',')
+
     def __add_item(self, item, switch_id, port, datapath):
         key = (switch_id, port)
         self.bws[key] = self.bws[key].append(
