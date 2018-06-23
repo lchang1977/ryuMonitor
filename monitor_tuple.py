@@ -170,7 +170,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
     def _predict_arima(self, values):
 
-        arima = Model(values)
+        arima = Model(values, self.config['DEFAULT']['compareAIC'])
         arima.fit()
         return arima.predict(self.forecast_size, self.time_interval)
 

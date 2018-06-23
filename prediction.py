@@ -5,9 +5,10 @@ from pyramid.arima import auto_arima
 
 class Model:
 
-    def __init__(self, data):
+    def __init__(self, data, comparing):
         data = data.astype(float)
         self.__data = data
+        self._comparing = comparing
         self.model = {}
         self.res = []
         print(self.__data.head())
@@ -33,13 +34,14 @@ class Model:
 
         # self.train = self.__data.loc['1985-01-01':'2016-12-01']
         # self.test = self.__data.loc['2015-01-01':]
-        line_to_write = 'AIC : {}, model ({}, {}, {}) x ({}, {}, {}, {})'.format(
-            self.model.aic(), self.model.order[0],
-            self.model.order[1], self.model.order[2],
-            self.model.seasonal_order[0], self.model.seasonal_order[1],
-            self.model.seasonal_order[2], self.model.seasonal_order[3])
 
-        self.save_aic(self.__data.index[0], self.__data.index[-1], line_to_write)
+        if self._comparing:
+            line_to_write = 'AIC : {}, model ({}, {}, {}) x ({}, {}, {}, {})'.format(
+                self.model.aic(), self.model.order[0],
+                self.model.order[1], self.model.order[2],
+                self.model.seasonal_order[0], self.model.seasonal_order[1],
+                self.model.seasonal_order[2], self.model.seasonal_order[3])
+            self.save_aic(self.__data.index[0], self.__data.index[-1], line_to_write)
 
         self.model.fit(self.__data)
 
