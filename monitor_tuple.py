@@ -170,7 +170,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
     def _predict_arima(self, values):
 
-        arima = Model(values, self.config['DEFAULT']['compareAIC'])
+        arima = Model(values, self.config.getboolean('DEFAULT', 'compareAIC'))
         arima.fit()
         return arima.predict(self.forecast_size, self.time_interval)
 
@@ -197,7 +197,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
     def _predict(self, datapath, port):
         # read file for next method
-        if self.config['DEFAULT']['react']:
+        if self.config.getboolean('DEFAULT', 'react'):
             self._predict_and_react(datapath, port)
         else:
             self._predict_and_save(datapath, port)
