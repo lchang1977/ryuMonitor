@@ -21,6 +21,7 @@ import numpy as np
 import pandas as pd
 import datetime
 import csv
+import configparser
 
 
 class SimpleMonitor13(app_manager.RyuApp):
@@ -47,6 +48,9 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.switch_type = OVS_lan_type()
         # initialize switch flows, change if different network topology
         self.initialize_br_flat()
+        # read config file
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
 
     def initialize_br_flat(self):
 
@@ -191,6 +195,13 @@ class SimpleMonitor13(app_manager.RyuApp):
         # save on file the predicted values
         prediction.to_csv('prediction-{}-{}-{}.csv'.format(first_ts, datapath.id, port), sep=',')
 
+    def _predict(self, datapath, port):
+        # read file for next method
+        if self.config['DEFAULT']['react']:
+            self._predict_and_react(datapath, port)
+        else:
+            self._predict_and_save(datapath, port)
+
     def __add_item(self, item, switch_id, port, datapath):
         key = (switch_id, port)
         self.bws[key] = self.bws[key].append(
@@ -211,7 +222,7 @@ class SimpleMonitor13(app_manager.RyuApp):
             self.num_measure = 0
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._predict_and_react, datapath, port)
+            self.prediction_thread = hub.spawn(self._predict, datapath, port)
 
 
 

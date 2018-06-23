@@ -33,12 +33,13 @@ class Model:
 
         # self.train = self.__data.loc['1985-01-01':'2016-12-01']
         # self.test = self.__data.loc['2015-01-01':]
-        line_to_write = 'AIC : {}, model ({}, {}, {}) x ({}, {}, {}, {})'\
-            .format(self.model.aic(), self.model.order[0],
-                    self.model.order[1], self.model.order[2],
-                    self.model.seasonal_order[0], self.model.seasonal_order[1],
-                    self.model.seasonal_order[2], self.model.seasonal_order[3])
-        self.save_aic()
+        line_to_write = 'AIC : {}, model ({}, {}, {}) x ({}, {}, {}, {})'.format(
+            self.model.aic(), self.model.order[0],
+            self.model.order[1], self.model.order[2],
+            self.model.seasonal_order[0], self.model.seasonal_order[1],
+            self.model.seasonal_order[2], self.model.seasonal_order[3])
+
+        self.save_aic(self.__data.index[0], self.__data.index[-1], line_to_write)
 
         self.model.fit(self.__data)
 
@@ -48,9 +49,9 @@ class Model:
         plt.show()
 
     def save_aic(self, start_ts, last_ts, line):
-        with open("past-aic.txt", "a") as myfile:
-            myfile.write('{}-{} :'.format(start_ts, last_ts))
-            myfile.write(line)
+        with open("past-aic.txt", "a") as file:
+            file.write('{}-{} :'.format(start_ts, last_ts))
+            file.write(line)
 
     def predict(self, horizon, sample_frequency):
         future_forecast = self.model.predict(n_periods=horizon)

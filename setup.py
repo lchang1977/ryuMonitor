@@ -11,7 +11,6 @@ class OVS_lan_type(app_manager.RyuApp):
         self._local = 'LOCAL'
 
     def initialize(self, datapath):
-        self._current = self._old_port
         parser = datapath.ofproto_parser
 
         # from physical port to local
