@@ -53,7 +53,7 @@ class Model:
     def save_aic(self, start_ts, last_ts, line):
         with open("past-aic.txt", "a") as file:
             file.write('{}-{} :'.format(start_ts, last_ts))
-            file.write(line)
+            file.write(line + '\n')
 
     def predict(self, horizon, sample_frequency):
         future_forecast = self.model.predict(n_periods=horizon)
