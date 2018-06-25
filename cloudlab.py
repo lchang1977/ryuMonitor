@@ -27,9 +27,6 @@ class Cloudlab(app_manager.RyuApp):
         self._local = 'LOCAL'
         self._portIterator = cycle([self._old_port, self._new_port])
 
-        # get old, so for next request start from new
-        self._get_new_port()
-
     def change_interface(self, datapath, old_port, old_flows):
         self._datapath = datapath
         self._parser = datapath.ofproto_parser
