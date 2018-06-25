@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="abcc2f60-2952-4901-af9d-5a48e5a34482" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloudlab.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloudlab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -55,8 +53,8 @@
       <file leaf-file-name="cloudlab.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloudlab.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+            <state relative-caret-position="680">
+              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -233,13 +231,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528467836700</updated>
-    </task>
-    <task id="LOCAL-00014" summary="New print">
-      <created>1528887374276</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1528887374276</updated>
     </task>
     <task id="LOCAL-00015" summary="Bug fixed">
       <created>1528905547300</created>
@@ -577,7 +568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1529773417811</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Get params from file">
+      <created>1529915487628</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1529915487628</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TodoView">
@@ -591,7 +589,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50067115" side_tool="true" weight="0.33903134" />
@@ -624,7 +621,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add import" />
     <MESSAGE value="Flow handler" />
     <MESSAGE value="New instance variable" />
     <MESSAGE value="Saved flows" />
@@ -649,7 +645,8 @@
     <MESSAGE value="get value from ini" />
     <MESSAGE value="New line" />
     <MESSAGE value="Config class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Config class" />
+    <MESSAGE value="Get params from file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Get params from file" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -922,8 +919,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudlab.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+        <state relative-caret-position="680">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
