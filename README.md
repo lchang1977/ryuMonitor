@@ -63,7 +63,7 @@ sudo ovs-vsctl show
 sudo ovs-vsctl set-controller br-flat-lan-1 tcp:<Controller_IP>:5555
 
 #view forwarding table (mac address table)
-sudo ovs-appctl fdb/show
+sudo ovs-appctl fdb/show <mybridge>
 
 #see mapping of OpenFlow ports to system ports
 sudo ovs-ofctl show <mybridge>
