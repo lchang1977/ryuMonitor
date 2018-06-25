@@ -1,12 +1,16 @@
 from ryu.base import app_manager
 from ryu.ofproto.ofproto_v1_2 import OFPG_ANY
 
+from config_reader import Reader
+
 
 class OVS_lan_type(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(OVS_lan_type, self).__init__(*args, **kwargs)
-        self._old_port = 1
+        # read config file
+        self.config = Reader()
+        self._old_port = self.config.old_port()
         self._local = 'LOCAL'
 
     def initialize(self, datapath):

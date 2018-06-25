@@ -3,6 +3,8 @@ from ryu.base import app_manager
 from ryu.ofproto.ofproto_v1_2 import OFPG_ANY
 from itertools import cycle
 
+from config_reader import Reader
+
 
 class Cloudlab(app_manager.RyuApp):
 
@@ -18,8 +20,10 @@ class Cloudlab(app_manager.RyuApp):
                        '3c:fd:fe:55:fe:62': '3c:fd:fe:55:fe:60'}
         self._parser = None
         self._datapath = None
-        self._old_port = 1
-        self._new_port = 3
+        # read config file
+        self.config = Reader()
+        self._old_port = self.config.old_port()
+        self._new_port = self.config.new_port()
         self._local = 'LOCAL'
         self._portIterator = cycle([self._old_port, self._new_port])
 
