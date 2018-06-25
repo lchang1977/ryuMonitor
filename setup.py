@@ -11,6 +11,7 @@ class OVS_lan_type(app_manager.RyuApp):
         # read config file
         self.config = Reader()
         self._old_port = self.config.old_port()
+        # local port, 'LOCAL'
         self._local = 0xfffffffe
 
     def initialize(self, datapath):
