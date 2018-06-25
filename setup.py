@@ -14,17 +14,18 @@ class OVS_lan_type(app_manager.RyuApp):
         self._local = 'LOCAL'
 
     def initialize(self, datapath):
+        print('Initializing switch {}'.format(datapath.id))
         parser = datapath.ofproto_parser
 
         # from physical port to local
         actions = [parser.OFPActionOutput(self._local)]
         match = parser.OFPMatch(in_port=self._old_port)
-        self.add_flow(datapath, 1, match, actions)
+        self.add_flow(datapath, 3, match, actions)
 
         # from LOCAL to physical port
         actions = [parser.OFPActionOutput(self._old_port)]
         match = parser.OFPMatch(in_port=self._local)
-        self.add_flow(datapath, 1, match, actions)
+        self.add_flow(datapath, 3, match, actions)
 
     def add_flow(self, datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
