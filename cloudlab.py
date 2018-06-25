@@ -43,7 +43,7 @@ class Cloudlab(app_manager.RyuApp):
                 match = self._parser.OFPMatch(in_port=rule.match['in_port'],
                                               eth_dst=rule.match['eth_dst'],
                                               eth_src=rule.match['eth_src'])
-                self._add_flow(3, match, actions)
+                self._add_flow(4, match, actions)
                 self._remove_flows(match, old_port)
             elif rule.match['in_port'] == old_port:
                 old_actions = rule.instructions[0].actions
@@ -53,7 +53,7 @@ class Cloudlab(app_manager.RyuApp):
                 new_match = self._parser.OFPMatch(in_port=new_out_port,
                                                   eth_dst=rule.match['eth_dst'],
                                                   eth_src=rule.match['eth_src'])
-                self._add_flow(3, new_match, old_actions)
+                self._add_flow(4, new_match, old_actions)
                 self._remove_flows(old_match)
 
     def _get_new_port(self, old_port):
@@ -79,6 +79,7 @@ class Cloudlab(app_manager.RyuApp):
             mod = self._parser.OFPFlowMod(datapath=self._datapath, priority=priority,
                                           match=match, instructions=inst)
         self._datapath.send_msg(mod)
+        print('Added new flow')
 
     def _remove_flows(self, match, out_port=None):
         """Create OFP flow mod message to remove flows from table."""
