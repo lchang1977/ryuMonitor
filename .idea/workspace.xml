@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abcc2f60-2952-4901-af9d-5a48e5a34482" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/arima_prediction.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/arima_prediction.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cloudlab.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloudlab.py" afterDir="false" />
     </list>
@@ -235,20 +233,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528467836700</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Print">
-      <created>1529409441423</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1529409441423</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Print">
-      <created>1529409606078</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1529409606078</updated>
     </task>
     <task id="LOCAL-00027" summary="New training size">
       <created>1529410832114</created>
@@ -579,7 +563,21 @@
       <option name="project" value="LOCAL" />
       <updated>1529931703917</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="New key in for loop">
+      <created>1529932007577</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1529932007577</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Debug">
+      <created>1529932139564</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1529932139564</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TodoView">
@@ -627,8 +625,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_UNVERSIONED_FILES_WHILE_COMMIT" value="false" />
-    <MESSAGE value="control multiple port for switch" />
-    <MESSAGE value="Initialize dict" />
     <MESSAGE value="Bug in key dict" />
     <MESSAGE value="Port as param" />
     <MESSAGE value="Delete previous flow" />
@@ -652,7 +648,9 @@
     <MESSAGE value="No type print" />
     <MESSAGE value="Format code" />
     <MESSAGE value="Debug print" />
-    <option name="LAST_COMMIT_MESSAGE" value="Debug print" />
+    <MESSAGE value="New key in for loop" />
+    <MESSAGE value="Debug" />
+    <option name="LAST_COMMIT_MESSAGE" value="Debug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

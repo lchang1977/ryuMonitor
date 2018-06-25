@@ -38,7 +38,7 @@ class Cloudlab(app_manager.RyuApp):
 
         actions = [self._parser.OFPActionOutput(new_out_port)]
 
-        for rule in sorted([flow for flow in old_flows if flow.priority == 1],
+        for rule in sorted([flow for flow in old_flows if flow.priority == 3],
                            key=lambda flow: (flow.match['in_port'])):
             print('In for loop')
             if rule.instructions[0].actions[0].port == old_port:
