@@ -45,15 +45,10 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.datapaths = {}
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
+        # change if different network topology
         self.setup = OVS_lan_type()
-        # initialize switch flows, change if different network topology
-        self.initialize_br_flat()
         # read config file
         self.config = Reader()
-
-    def initialize_br_flat(self):
-        for dp in self.datapaths.values():
-            self.setup.initialize(dp)
 
     @set_ev_cls(ofp_event.EventOFPStateChange,
                 [MAIN_DISPATCHER, DEAD_DISPATCHER])
@@ -63,6 +58,9 @@ class SimpleMonitor13(app_manager.RyuApp):
             if datapath.id not in self.datapaths:
                 self.logger.debug('register datapath: %016x', datapath.id)
                 self.datapaths[datapath.id] = datapath
+                # initialize datapath with default flows
+                self.setup.initialize(datapath)
+
         elif ev.state == DEAD_DISPATCHER:
             if datapath.id in self.datapaths:
                 self.logger.debug('unregister datapath: %016x', datapath.id)
