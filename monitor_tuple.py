@@ -45,16 +45,15 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.datapaths = {}
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
-        self.switch_type = OVS_lan_type()
+        self.setup = OVS_lan_type()
         # initialize switch flows, change if different network topology
         self.initialize_br_flat()
         # read config file
         self.config = Reader()
 
     def initialize_br_flat(self):
-
         for dp in self.datapaths.values():
-            self.switch_type.initialize(dp)
+            self.setup.initialize(dp)
 
     @set_ev_cls(ofp_event.EventOFPStateChange,
                 [MAIN_DISPATCHER, DEAD_DISPATCHER])
