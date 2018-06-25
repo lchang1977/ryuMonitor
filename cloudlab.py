@@ -34,12 +34,13 @@ class Cloudlab(app_manager.RyuApp):
 
         print('Moving from {} to {}'.format(old_port, new_out_port))
 
-        print(old_flows)
+        print(len(old_flows))
 
         actions = [self._parser.OFPActionOutput(new_out_port)]
 
         for rule in sorted([flow for flow in old_flows if flow.priority == 1],
                            key=lambda flow: (flow.match['in_port'])):
+            print('In for loop')
             if rule.instructions[0].actions[0].port == old_port:
                 print('Changing out port')
                 match = self._parser.OFPMatch(in_port=rule.match['in_port'],
