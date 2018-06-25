@@ -16,9 +16,7 @@ class OVS_lan_type(app_manager.RyuApp):
     def initialize(self, datapath):
         print('Initializing switch {}'.format(datapath.id))
         parser = datapath.ofproto_parser
-
-        print(type(self._old_port))
-        print(type(self._local))
+        
         # from physical port to local
         actions = [parser.OFPActionOutput(self._local)]
         match = parser.OFPMatch(in_port=self._old_port)
