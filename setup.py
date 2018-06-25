@@ -11,12 +11,14 @@ class OVS_lan_type(app_manager.RyuApp):
         # read config file
         self.config = Reader()
         self._old_port = self.config.old_port()
-        self._local = 'LOCAL'
+        self._local = 0xfffffffe
 
     def initialize(self, datapath):
         print('Initializing switch {}'.format(datapath.id))
         parser = datapath.ofproto_parser
 
+        print(type(self._old_port))
+        print(type(self._local))
         # from physical port to local
         actions = [parser.OFPActionOutput(self._local)]
         match = parser.OFPMatch(in_port=self._old_port)
