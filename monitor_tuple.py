@@ -16,6 +16,7 @@ from setup import OVS_lan_type
 from prediction import Model
 from cloudlab import Cloudlab
 from config_reader import Reader
+from threading import Thread
 
 import matplotlib.pylab as plt
 import numpy as np
@@ -228,7 +229,9 @@ class SimpleMonitor13(app_manager.RyuApp):
             self.num_measure = 0
 
             # create a new thread for ARIMA prediction
-            self.prediction_thread = hub.spawn(self._predict, datapath, port)
+            # self.prediction_thread = hub.spawn(self._predict, datapath, port)
+            thread = Thread(target=self._predict, args=(datapath, port))
+            thread.start()
 
 
 
