@@ -27,9 +27,6 @@ class Cloudlab(app_manager.RyuApp):
         self._local = 'LOCAL'
         self._portIterator = cycle([self._old_port, self._new_port])
 
-        # get old, so for next request start from new
-        self._get_new_port()
-
     def change_interface(self, datapath, old_port, old_flows):
         self._datapath = datapath
         self._parser = datapath.ofproto_parser
@@ -39,24 +36,19 @@ class Cloudlab(app_manager.RyuApp):
 
         actions = [self._parser.OFPActionOutput(new_out_port)]
 
-        for rule in sorted([flow for flow in old_flows if flow.priority == 1],
-                           key=lambda flow: (flow.match['in_port'],
-                                             flow.match['eth_dst'])):
+        for rule in sorted([flow for flow in old_flows if flow.priority == 3],
+                           key=lambda flow: (flow.match['in_port'])):
             if rule.instructions[0].actions[0].port == old_port:
-                match = self._parser.OFPMatch(in_port=rule.match['in_port'],
-                                              eth_dst=rule.match['eth_dst'],
-                                              eth_src=rule.match['eth_src'])
-                self._add_flow(3, match, actions)
+                match = self._parser.OFPMatch(in_port=rule.match['in_port'])
+                self._add_flow(4, match, actions)
+                # in the future remove this
                 self._remove_flows(match, old_port)
             elif rule.match['in_port'] == old_port:
                 old_actions = rule.instructions[0].actions
-                old_match = self._parser.OFPMatch(in_port=rule.match['in_port'],
-                                                  eth_dst=rule.match['eth_dst'],
-                                                  eth_src=rule.match['eth_src'])
-                new_match = self._parser.OFPMatch(in_port=new_out_port,
-                                                  eth_dst=rule.match['eth_dst'],
-                                                  eth_src=rule.match['eth_src'])
-                self._add_flow(3, new_match, old_actions)
+                old_match = self._parser.OFPMatch(in_port=rule.match['in_port'])
+                new_match = self._parser.OFPMatch(in_port=new_out_port)
+                self._add_flow(4, new_match, old_actions)
+                # in the future remove this
                 self._remove_flows(old_match)
 
     def _get_new_port(self, old_port):
@@ -82,6 +74,7 @@ class Cloudlab(app_manager.RyuApp):
             mod = self._parser.OFPFlowMod(datapath=self._datapath, priority=priority,
                                           match=match, instructions=inst)
         self._datapath.send_msg(mod)
+        print('Added new flow')
 
     def _remove_flows(self, match, out_port=None):
         """Create OFP flow mod message to remove flows from table."""
