@@ -191,6 +191,13 @@ class SimpleMonitor13(app_manager.RyuApp):
         # save on file the predicted values
         prediction.to_csv('prediction-{}-{}-{}.csv'.format(first_ts, datapath.id, port), sep=',')
 
+        # save on file the predicted values for logging purpose
+        prediction.to_csv('prediction-{}-{}.csv'.format(datapath.id, port), mode='a', header=False, sep=',')
+
+    def _save_history(self, data, switch_id, port):
+        data.to_csv('{}-{}-{}.csv'.format('history', switch_id, port),
+                                  mode='a', header=False, sep=',')
+
     def _predict(self, datapath, port):
         # read file for next method
         if self.config.react():
@@ -211,6 +218,9 @@ class SimpleMonitor13(app_manager.RyuApp):
         else:
             self.bws[key][-1:].to_csv('{}-{}-{}.csv'.format(self.filename, switch_id, port),
                                       mode='a', header=False, sep=',')
+
+        # save value for logging
+        self._save_history(self.bws[key][-1:], switch_id, port)
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
