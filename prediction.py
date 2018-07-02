@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 from pyramid.arima import auto_arima
 
 
@@ -10,7 +11,7 @@ class Model:
         self.__data = data
         self._comparing = comparing
         self.model = {}
-        self.res = []
+        self.results = []
         print(self.__data.head())
         plt.plot(self.__data)
         # self.__data.plot()
@@ -43,7 +44,17 @@ class Model:
                 self.model.seasonal_order[2], self.model.seasonal_order[3])
             self.save_aic(self.__data.index[0], self.__data.index[-1], line_to_write)
 
-        self.model.fit(self.__data)
+        self.results = self.model.fit(self.__data)
+
+    def use_best_fit(self):
+        # apply the model with best parameters found so far
+        self.model = sm.tsa.statespace.SARIMAX(self.__data,
+                                               order=(1, 1, 1),
+                                               seasonal_order=(0, 1, 1, 12),
+                                               enforce_stationarity=False,
+                                               enforce_invertibility=False)
+
+        self.results = self.model.fit()
 
     def show_and_save(self, forecast):
         pd.concat([self.__data, forecast], axis=1).plot()
