@@ -40,6 +40,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.interested_port = [1]
         self.filename = 'bandwidth'
         self.last_flows = None
+        self.last_timestamp = None
         # perform request to switch every X second
         self.time_interval = 1
         self.bws = {}
@@ -126,13 +127,16 @@ class SimpleMonitor13(app_manager.RyuApp):
             if key not in self.prev :
                 self.logger.info('First packet')
                 self.bws[key] = pd.DataFrame(data=[], columns=['BW'])
+                self.last_timestamp = datetime.datetime.now()
                 self.prev[key] = {}
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
             # else calculate bandwidth
             else:
-                rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / self.time_interval
-                tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / self.time_interval
+                dt = datetime.datetime.now() - self.last_timestamp
+                s = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0) / 1000.0
+                rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / s
+                tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / s
                 self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %.2f %.2f',
                                  datapath_id, stat.port_no,
                                  stat.rx_packets, rx_bytes, stat.rx_errors,
