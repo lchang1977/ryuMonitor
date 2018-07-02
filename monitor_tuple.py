@@ -40,7 +40,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.interested_port = [1]
         self.filename = 'bandwidth'
         self.last_flows = None
-        self.last_timestamp = None
+        self.last_timestamp = {}
         # perform request to switch every X second
         self.time_interval = 1
         self.bws = {}
