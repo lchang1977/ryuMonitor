@@ -133,8 +133,10 @@ class SimpleMonitor13(app_manager.RyuApp):
                 self.prev[key]['prev_tx'] = tx_bytes
             # else calculate bandwidth
             else:
-                dt = datetime.datetime.now() - self.last_timestamp
+                current = datetime.datetime.now()
+                dt = current - self.last_timestamp
                 s = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0) / 1000.0
+                print ('Elapsed : {} s'.format(s))
                 rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / s
                 tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / s
                 self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %.2f %.2f',
@@ -144,6 +146,7 @@ class SimpleMonitor13(app_manager.RyuApp):
                                  rx_bw, tx_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
+                self.last_timestamp = current
 
                 if stat.port_no in self.interested_port:
                     self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
