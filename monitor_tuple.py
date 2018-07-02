@@ -175,7 +175,8 @@ class SimpleMonitor13(app_manager.RyuApp):
     def _predict_arima(self, values):
 
         arima = Model(values, self.config.save_aic())
-        arima.fit()
+        # arima.fit()
+        arima.use_best_fit()
         return arima.predict(self.forecast_size, self.time_interval)
 
     def check_maximum(self, prediction, datapath, port):
