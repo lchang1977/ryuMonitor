@@ -230,6 +230,7 @@ class SimpleMonitor13(app_manager.RyuApp):
 
             # create a new thread for ARIMA prediction
             # self.prediction_thread = hub.spawn(self._predict, datapath, port)
+            print('Starting new thread')
             thread = Thread(target=self._predict, args=(datapath, port))
             thread.start()
 

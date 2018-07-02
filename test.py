@@ -7,6 +7,14 @@ from prediction import Model
 import csv
 import datetime
 
+data = pd.read_csv("band.csv", index_col=0)
+data.index = pd.to_datetime(data.index)
+forecast = pd.read_csv("pred.csv", index_col=0)
+forecast.index = pd.to_datetime(forecast.index)
+pd.concat([data, forecast], axis=1, sort=True).plot()
+plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
+plt.show()
+
 data1 = pd.read_csv("electric_Production.csv", index_col=0)
 # Interpret index as timestamp
 data1.index = pd.to_datetime(data1.index)
