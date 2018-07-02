@@ -9,6 +9,7 @@ class Model:
     def __init__(self, data, comparing):
         data = data.astype(float)
         self.__data = data
+        self._firstTime = True
         self._comparing = comparing
         self.model = {}
         self.results = []
@@ -48,11 +49,19 @@ class Model:
 
     def use_best_fit(self):
         # apply the model with best parameters found so far
-        self.model = sm.tsa.statespace.SARIMAX(self.__data,
-                                               order=(1, 1, 1),
-                                               seasonal_order=(0, 1, 1, 12),
-                                               enforce_stationarity=False,
-                                               enforce_invertibility=False)
+        if self._firstTime:
+            self.model = sm.tsa.statespace.SARIMAX(self.__data,
+                                                   order=(0, 1, 1),
+                                                   seasonal_order=(0, 1, 0, 12),
+                                                   enforce_stationarity=False,
+                                                   enforce_invertibility=False)
+            self._firstTime = False
+        else:
+            self.model = sm.tsa.statespace.SARIMAX(self.__data,
+                                                   order=(1, 1, 1),
+                                                   seasonal_order=(0, 1, 1, 12),
+                                                   enforce_stationarity=False,
+                                                   enforce_invertibility=False)
 
         self.results = self.model.fit()
 
