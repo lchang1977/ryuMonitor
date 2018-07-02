@@ -76,7 +76,7 @@ class Model:
             file.write(line + '\n')
 
     def predict(self, horizon, sample_frequency):
-        future_forecast = self.model.predict(n_periods=horizon)
+        future_forecast = self.model.predict(n_periods=horizon, dynamic=False)
 
         future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
                      for i, v in enumerate([self.__data.index[-1]]*horizon)]
