@@ -75,8 +75,29 @@ class Model:
             file.write('{}-{} :'.format(start_ts, last_ts))
             file.write(line + '\n')
 
+    def predict_with_best(self, horizon, sample_frequency):
+        pred = self.results.get_forecast(steps=horizon)
+
+        # Get confidence intervals of forecasts
+        pred_ci = pred.conf_int()
+
+        future_ts = [v + pd.to_timedelta(1 * (i + 1), unit='s')
+                     for i, v in enumerate([self.__data.index[-1]] * 50)]
+        future_forecast = pd.DataFrame(pred.predicted_mean.values, index=future_ts, columns=['Prediction'])
+
+        ax = self.__data.plot(label='observed', figsize=(20, 15))
+        future_forecast.plot(ax=ax, label='Forecast')
+        ax.set_xlabel('Date')
+        ax.set_ylabel('CO2 Levels')
+
+        plt.legend()
+        plt.show()
+        self.show_and_save(future_forecast)
+
+        return future_forecast
+
     def predict(self, horizon, sample_frequency):
-        future_forecast = self.model.predict(n_periods=horizon, dynamic=False)
+        future_forecast = self.model.predict(n_periods=horizon)
 
         future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
                      for i, v in enumerate([self.__data.index[-1]]*horizon)]

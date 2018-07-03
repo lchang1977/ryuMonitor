@@ -177,8 +177,9 @@ class SimpleMonitor13(app_manager.RyuApp):
         arima = Model(values, self.config.save_aic())
         # comment out here for choosing best params
         # arima.fit()
+        # return arima.predict(self.forecast_size, self.time_interval)
         arima.use_best_fit()
-        return arima.predict(self.forecast_size, self.time_interval)
+        return arima.predict_with_best(self.forecast_size, self.time_interval)
 
     def check_maximum(self, prediction, datapath, port):
         if max(prediction) > self.threshold:
