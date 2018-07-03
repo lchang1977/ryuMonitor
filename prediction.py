@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from pyramid.arima import auto_arima
+from sklearn.metrics import mean_squared_error
 
 
 class Model:
@@ -93,6 +94,12 @@ class Model:
         plt.legend()
         plt.show()
         self.show_and_save(future_forecast)
+
+        y_forecasted = pred.predicted_mean
+
+        # Compute the mean square error
+        mse = mean_squared_error(self.__data, y_forecasted)
+        print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
 
         return future_forecast
 
