@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 from arima import Arima
 from prediction import Model
 
@@ -11,9 +12,15 @@ data = pd.read_csv("band.csv", index_col=0)
 data.index = pd.to_datetime(data.index)
 forecast = pd.read_csv("pred.csv", index_col=0)
 forecast.index = pd.to_datetime(forecast.index)
-pd.concat([data, forecast], axis=1, sort=True).plot()
+#pd.concat([data, forecast], axis=1, sort=True).plot()
+plt.plot(data)
+plt.plot(forecast, color='red')
 plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
 plt.show()
+
+# Compute the mean square error
+mse = mean_squared_error(data, forecast)
+print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
 
 data1 = pd.read_csv("electric_Production.csv", index_col=0)
 # Interpret index as timestamp
