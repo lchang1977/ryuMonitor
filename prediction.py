@@ -81,8 +81,8 @@ class Model:
         # Get confidence intervals of forecasts
         pred_ci = pred.conf_int()
 
-        future_ts = [v + pd.to_timedelta(1 * (i + 1), unit='s')
-                     for i, v in enumerate([self.__data.index[-1]] * 50)]
+        future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
+                     for i, v in enumerate([self.__data.index[-1]] * horizon)]
         future_forecast = pd.DataFrame(pred.predicted_mean.values, index=future_ts, columns=['Prediction'])
 
         ax = self.__data.plot(label='observed', figsize=(20, 15))
