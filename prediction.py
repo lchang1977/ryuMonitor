@@ -85,13 +85,6 @@ class Model:
                      for i, v in enumerate([self.__data.index[-1]] * horizon)]
         future_forecast = pd.DataFrame(pred.predicted_mean.values, index=future_ts, columns=['Prediction'])
 
-        ax = self.__data.plot(label='observed', figsize=(20, 15))
-        future_forecast.plot(ax=ax, label='Forecast')
-        ax.set_xlabel('Date')
-        ax.set_ylabel('CO2 Levels')
-
-        plt.legend()
-        plt.show()
         self.show_and_save(future_forecast)
 
         return future_forecast

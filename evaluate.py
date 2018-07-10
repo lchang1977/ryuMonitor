@@ -8,11 +8,11 @@ from statsmodels.tsa.arima_model import ARIMA
 class Measure:
 
     def __init__(self):
-        self.forecast = pd.read_csv("electric_Production.csv", index_col=0)
+        self.forecast = pd.read_csv("band.csv", index_col=0)
         # Interpret index as timestamp
         self.forecast.index = pd.to_datetime(self.forecast.index)
 
-        self.data = pd.read_csv("electric_Production.csv", index_col=0)
+        self.data = pd.read_csv("pred.csv", index_col=0)
         # Interpret index as timestamp
         self.data.index = pd.to_datetime(self.data.index)
 
