@@ -31,9 +31,9 @@ class SimpleMonitor13(app_manager.RyuApp):
         super(SimpleMonitor13, self).__init__(*args, **kwargs)
         # limit for bandwidth, if over react
         self.threshold = 2000.00
-        self.max_training_size = 150
+        self.max_training_size = 200
         # perform a prediction every X packets(measures)
-        self.freq_prediction = 20
+        self.freq_prediction = 18
         # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
@@ -197,7 +197,7 @@ class SimpleMonitor13(app_manager.RyuApp):
     def _predict_and_save(self, datapath, port):
         key = (datapath.id, port)
         prediction = self._predict_arima(self.bws[key])
-        first_ts = prediction.index[1]
+        first_ts = prediction.index[0]
 
         # save on file the predicted values
         prediction.to_csv('prediction-{}-{}-{}.csv'.format(first_ts, datapath.id, port), sep=',')
