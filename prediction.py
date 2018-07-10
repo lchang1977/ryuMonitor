@@ -35,7 +35,7 @@ class Model:
               self.model.seasonal_order[2], self.model.seasonal_order[3]))
 
         # self.train = self.__data.loc['1985-01-01':'2016-12-01']
-        # self.test = self.__data.loc['2015-01-01':]
+        # self.test = self.__data.loc['2015-01-01':] 
 
         if self._comparing:
             line_to_write = 'AIC : {}, model ({}, {}, {}) x ({}, {}, {}, {})'.format(
