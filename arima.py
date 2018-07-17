@@ -89,6 +89,25 @@ class Arima:
 
         return future_forecast
 
+    def _predict_var_gar(self, values):
+        garch11 = arch_model(values, p=1, q=1)
+        results = garch11.fit(update_freq=10)
+
+        print(results.summary())
+        forecasts = results.forecast(horizon=30, method='simulation')
+        sims = forecasts.simulations
+
+        lines = plt.plot(sims.values[-1, ::30].T, alpha=0.33)
+        lines[0].set_label('Simulated paths')
+        plt.plot()
+
+        print('Percentile')
+        print(np.percentile(sims.values[-1, 30].T, 5))
+        plt.hist(sims.values[-1, 30], bins=50)
+        plt.title('Distribution of Returns')
+
+        # plt.show()
+
     def fit(self, train_size='2016-12-01'):
         self.model = auto_arima(self.__data, start_p=1, start_q=1,
                                          max_p=3, max_q=3, m=12,

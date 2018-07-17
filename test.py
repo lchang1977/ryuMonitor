@@ -1,16 +1,28 @@
 import pandas as pd
 import numpy as np
+import itertools
+import warnings
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error
 from arima import Arima
 from prediction import Model
+from evaluate import Measure
 
 import csv
 import datetime
 
+evaluation = Measure()
+evaluation.plot_error()
+
+'''
+plt.style.use('fivethirtyeight')
+
 data = pd.read_csv("band.csv", index_col=0)
+#data = data[202:]
 data.index = pd.to_datetime(data.index)
 forecast = pd.read_csv("pred.csv", index_col=0)
+#forecast = forecast[140:]
 forecast.index = pd.to_datetime(forecast.index)
 #pd.concat([data, forecast], axis=1, sort=True).plot()
 plt.plot(data)
@@ -18,11 +30,68 @@ plt.plot(forecast, color='red')
 plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
 plt.show()
 
-# Compute the mean square error
-mse = mean_squared_error(data, forecast)
-print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
+ax = data.plot(label='observed', figsize=(20, 15))
+forecast.plot(ax=ax, label='Forecast')
+ax.set_xlabel('Date')
+ax.set_ylabel('Bandwidth [B/s]')
 
-data1 = pd.read_csv("electric_Production.csv", index_col=0)
+plt.legend()
+plt.show()
+
+arima = Model(data, False)
+# comment out here for choosing best params
+arima.fit()
+
+# Define the p, d and q parameters to take any value between 0 and 2
+p = d = q = range(0, 2)
+
+# Generate all different combinations of p, q and q triplets
+pdq = list(itertools.product(p, d, q))
+
+# Generate all different combinations of seasonal p, q and q triplets
+seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
+mod = sm.tsa.statespace.SARIMAX(data,
+                                order=(1, 0, 1),
+                                seasonal_order=(1, 1, 1, 12),
+                                enforce_stationarity=False,
+                                enforce_invertibility=False)
+results = mod.fit(disp=0)
+print('ARIMA AIC:{}'.format(results.aic))
+print(results.summary().tables[1])
+
+mod = sm.tsa.statespace.SARIMAX(data,
+                                order=(0, 0, 1),
+                                seasonal_order=(1, 1, 1, 12),
+                                enforce_stationarity=False,
+                                enforce_invertibility=False)
+results = mod.fit(disp=0)
+print('ARIMA AIC:{}'.format(results.aic))
+print(results.summary().tables[1])'''
+
+'''warnings.filterwarnings("ignore") # specify to ignore warning messages
+
+for param in pdq:
+    for param_seasonal in seasonal_pdq:
+        try:
+            mod = sm.tsa.statespace.SARIMAX(data,
+                                            order=param,
+                                            seasonal_order=param_seasonal,
+                                            enforce_stationarity=False,
+                                            enforce_invertibility=False)
+
+            results = mod.fit(disp=0)
+
+            print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
+            with open("results.txt", "a") as file:
+                file.write('ARIMA{}x{}12 - AIC:{} \n'.format(param, param_seasonal, results.aic))
+                file.write(str(results.summary().tables[1]) + '\n')
+        except:
+            continue
+'''
+results.plot_diagnostics(figsize=(15, 12))
+plt.show()
+
+"""data1 = pd.read_csv("electric_Production.csv", index_col=0)
 # Interpret index as timestamp
 data1.index = pd.to_datetime(data1.index)
 
@@ -59,7 +128,7 @@ data.index = pd.to_datetime(data.index)
 
 model = Model(data)
 model.fit()
-model.predict(5, 30)
+model.predict(5, 30)"""
 
 """
 

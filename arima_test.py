@@ -30,7 +30,7 @@ def find_best():
             forecast = forecast.append(model.predict(15, 1))
 
     # save on file the predicted values
-    forecast.to_csv('prediction-best.csv', sep=',')
+    forecast.to_csv('pred-best.csv', sep=',')
 
     ax = data1.plot(label='observed', figsize=(20, 15))
     forecast.plot(ax=ax, label='Forecast')

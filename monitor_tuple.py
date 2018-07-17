@@ -235,14 +235,14 @@ class SimpleMonitor13(app_manager.RyuApp):
 
         # increment number updates and check if time to perform prediction
         self.num_measure += 1
-        if self.num_measure == self.freq_prediction:
+        '''if self.num_measure == self.freq_prediction:
             self.num_measure = 0
 
             # create a new thread for ARIMA prediction
             # self.prediction_thread = hub.spawn(self._predict, datapath, port)
             print('Starting new thread')
             thread = Thread(target=self._predict, args=(datapath, port))
-            thread.start()
+            thread.start()'''
 
 
 
