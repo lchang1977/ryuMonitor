@@ -1,16 +1,5 @@
-import pandas as pd
-import numpy as np
-import itertools
-import warnings
 import matplotlib.pyplot as plt
-import statsmodels.api as sm
-from sklearn.metrics import mean_squared_error
-from statsmodels.tsa.arima_model import ARIMA
-from prediction import Model
 from evaluate import Measure
-
-import csv
-import datetime
 
 evaluation = Measure()
 # evaluation.plot_error()

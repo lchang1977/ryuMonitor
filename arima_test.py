@@ -1,13 +1,10 @@
 import warnings
-import itertools
 import pandas as pd
-import numpy as np
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
-from statsmodels.tsa.api import ExponentialSmoothing, SimpleExpSmoothing, Holt
-from prediction import Model
-from arima import Arima
+from statsmodels.tsa.api import ExponentialSmoothing
+from algorithms.prediction import Model
+from algorithms.garch import Garch
 
 plt.style.use('fivethirtyeight')
 
@@ -88,12 +85,12 @@ def garch():
     for count in range(0, len(data1) - 150):
         print(count)
         training_data = data1[count:count + 150]
-        model = Arima(training_data)
-        model.fit_with_garch(150)
+        model = Garch(training_data)
+        model.fit(150)
         if count == 0:
-            forecast = model.predict_with_garch(1)
+            forecast = model.predict(1)
         else:
-            forecast = forecast.append(model.predict_with_garch(1))
+            forecast = forecast.append(model.predict(1))
 
     # save on file the predicted values
     forecast.to_csv('pred-best-garch.csv', sep=',')
@@ -154,7 +151,6 @@ def compare_50():
 
 
     model = Model(data1)
-
 
     warnings.filterwarnings("ignore") # specify to ignore warning messages
 

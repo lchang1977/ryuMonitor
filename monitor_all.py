@@ -1,5 +1,4 @@
 from operator import attrgetter
-from arch import arch_model
 
 import matplotlib
 matplotlib.use('Agg')
@@ -11,13 +10,10 @@ from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
 from setup import OVS_lan_type
-from prediction import Model
+from algorithms.prediction import Model
 from cloudlab import Cloudlab
 from config_reader import Reader
-from threading import Thread
 
-import matplotlib.pylab as plt
-import numpy as np
 import pandas as pd
 import datetime
 
