@@ -5,7 +5,7 @@ import warnings
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error
-from arima import Arima
+from statsmodels.tsa.arima_model import ARIMA
 from prediction import Model
 from evaluate import Measure
 
@@ -92,7 +92,7 @@ for param in pdq:
         except:
             continue
 '''
-results.plot_diagnostics(figsize=(15, 12))
+# results.plot_diagnostics(figsize=(15, 12))
 plt.show()
 
 """data1 = pd.read_csv("electric_Production.csv", index_col=0)

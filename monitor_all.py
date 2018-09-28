@@ -148,27 +148,6 @@ class SimpleMonitor13(app_manager.RyuApp):
                 if stat.port_no in self.interested_port:
                     self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
 
-    def _predict_var_gar(self, values):
-
-        garch11 = arch_model(values, p=1, q=1)
-        results = garch11.fit(update_freq=10)
-
-        print(results.summary())
-
-        forecasts = results.forecast(horizon=30, method='simulation')
-        sims = forecasts.simulations
-
-        lines = plt.plot(sims.values[-1, ::30].T, alpha=0.33)
-        lines[0].set_label('Simulated paths')
-        plt.plot()
-
-        print('Percentile')
-        print(np.percentile(sims.values[-1, 30].T, 5))
-        plt.hist(sims.values[-1, 30], bins=50)
-        plt.title('Distribution of Returns')
-
-        plt.show()
-
     def _predict_arima(self, values):
 
         arima = Model(values, self.config.save_aic())
@@ -230,16 +209,17 @@ class SimpleMonitor13(app_manager.RyuApp):
         # save value for logging
         self._save_history(self.bws[key][-1:], switch_id, port)
 
-        # increment number updates and check if time to perform prediction
-        self.num_measure += 1
-        '''if self.num_measure == self.freq_prediction:
-            self.num_measure = 0
+        if not self.config.log_only():
+            # increment number updates and check if time to perform prediction
+            self.num_measure += 1
+            if self.num_measure == self.freq_prediction:
+                self.num_measure = 0
 
-            # create a new thread for ARIMA prediction
-            # self.prediction_thread = hub.spawn(self._predict, datapath, port)
-            print('Starting new thread')
-            thread = Thread(target=self._predict, args=(datapath, port))
-            thread.start()'''
+                # create a new thread for ARIMA prediction
+                self.prediction_thread = hub.spawn(self._predict, datapath, port)
+                '''print('Starting new thread')
+                thread = Thread(target=self._predict, args=(datapath, port))
+                thread.start()'''
 
 
 

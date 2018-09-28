@@ -12,6 +12,9 @@ class Reader:
     def save_aic(self):
         return self.config.getboolean('DEFAULT', 'compareAIC')
 
+    def log_only(self):
+        return self.config.getboolean('DEFAULT', 'log_only')
+
     def old_port(self):
         return self.config.getint('OVS', 'old_port')
 
