@@ -24,12 +24,12 @@ class Arima:
         # Rename column
         self.__data.columns = ['Energy Production']
 
-        plt.plot(self.__data)
+        '''plt.plot(self.__data)
         plt.show()
 
         result = seasonal_decompose(self.__data, model='multiplicative')
         fig = result.plot()
-        fig.show()
+        fig.show()'''
 
     def _get_best_model(self, ts, p_range=5, d_range=2):
         best_aic = np.inf

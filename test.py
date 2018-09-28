@@ -1,83 +1,49 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
-from arima import Arima
-from prediction import Model
+from evaluate import Measure
 
 import csv
 import datetime
 
 data = pd.read_csv("band.csv", index_col=0)
 data.index = pd.to_datetime(data.index)
-forecast = pd.read_csv("pred.csv", index_col=0)
-forecast.index = pd.to_datetime(forecast.index)
-#pd.concat([data, forecast], axis=1, sort=True).plot()
-plt.plot(data)
-plt.plot(forecast, color='red')
-plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
-plt.show()
-
-# Compute the mean square error
-mse = mean_squared_error(data, forecast)
-print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
-
-data1 = pd.read_csv("electric_Production.csv", index_col=0)
-# Interpret index as timestamp
-data1.index = pd.to_datetime(data1.index)
-
-# Rename column
-data1.columns = ['Energy Production']
-arima = Arima(data1)
-#arima.fit()
-#arima.predict()
-
-ori = np.array([('2018-06-13 06:57:01.742172', 132.23),
-                ('2018-06-13 06:57:11.742812', 133.32),
-                ('2018-06-13 06:57:21.743336', 2257.68),
-                ('2018-06-13 06:57:11.742813', 133.3),
-                ('2018-06-13 06:57:11.742814', 133.2),
-                ('2018-06-13 06:57:11.742815', 133.9),
-                ('2018-06-13 06:57:11.742816', 133.1),
-                ('2018-06-13 06:57:11.742817', 133.1),
-                ('2018-06-13 06:57:11.742818', 133.02),
-                ('2018-06-13 06:57:11.742819', 133.05),
-                ('2018-06-13 06:57:11.742820', 133.0),
-                ('2018-06-13 06:57:11.742821', 133.31),
-                ('2018-06-13 06:57:11.742822', 133.98),
-                ('2018-06-13 06:57:11.742823', 133.42),
-                ('2018-06-13 06:57:11.742824', 133.42),
-                ('2018-06-13 06:57:11.742825', 133.42),
-                ('2018-06-13 06:57:31.743826', 251)])
-
-data = pd.DataFrame(data=ori[:, 1:], index=ori[:, 0], columns=['BW'])
-data.index = pd.to_datetime(data.index)
-
-#data.plot()
-#plt.plot(ori)
-#plt.show()
-
-model = Model(data)
-model.fit()
-model.predict(5, 30)
-
-"""
-
-#data = pd.DataFrame(data=ori[:, 1:], index=ori[:, 0], columns=['BW'])
-data = pd.DataFrame(data=[], columns=['BW'])
-
-# Interpret index as timestamp
-data.index = pd.to_datetime(data.index)
-print(data)
+evaluation = Measure()
+evaluation.compare_cdf()
 
 
-model = Model(data)
-model.fit()
-'''data = data.append(pd.DataFrame(['2018-06-13 06:57:41.744592', 119]))
-print(data)
-#data = pd.Series(ori[1], index=ori[0])
-#print(data)
+'''
+test = data[:150]
 
-arima.fit_with_garch(300)
-arima.predict_with_garch()'''
-"""
+# Plot ACF:
+lag_acf = acf(test, nlags=20)
+#plt.subplot(121)
+plt.plot(lag_acf)
+plt.axhline(y=0, linestyle='--', color='gray')
+plt.axhline(y=-1.96 / np.sqrt(len(test)), linestyle='--', color='gray')
+plt.axhline(y=1.96 / np.sqrt(len(test)), linestyle='--', color='gray')
+#plt.title('Autocorrelation Function')
+
+ax.set_ylabel('Autocorrelation')
+ax.set_xlabel('Lag')
+
+fig.set_size_inches(width, height)
+fig.savefig('auto.pdf')
+
+# Plot PACF:
+lag_pacf = pacf(test, nlags=20, method='ols')
+#plt.subplot(122)
+plt.plot(lag_pacf)
+plt.axhline(y=0, linestyle='--', color='gray')
+plt.axhline(y=-1.96 / np.sqrt(len(test)), linestyle='--', color='gray')
+plt.axhline(y=1.96 / np.sqrt(len(test)), linestyle='--', color='gray')
+#plt.title('Partial Autocorrelation Function')
+
+ax.set_ylabel('Partial Autocorrelation')
+ax.set_xlabel('Lag')
+
+fig.set_size_inches(width, height)
+fig.savefig('partial auto.pdf')
+
+'''
+

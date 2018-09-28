@@ -4,14 +4,12 @@ from arch import arch_model
 import matplotlib
 matplotlib.use('Agg')
 
-from ryu.app import simple_switch_13
 from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
-from arima import Arima
 from setup import OVS_lan_type
 from prediction import Model
 from cloudlab import Cloudlab
@@ -22,7 +20,6 @@ import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
 import datetime
-import csv
 
 
 class SimpleMonitor13(app_manager.RyuApp):

@@ -48,7 +48,7 @@ sudo pip install numexpr --upgrade
 
 Now you are able to run the controller:
 ```
-ryu-manager --ofp-tcp-listen-port 5555 --verbose ryuMonitor/monitor_tuple.py
+ryu-manager --ofp-tcp-listen-port 5555 --verbose ryuMonitor/monitor_all.py
 ```
 
 ### Helpful commands
