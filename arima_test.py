@@ -5,7 +5,9 @@ import numpy as np
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
+from statsmodels.tsa.api import ExponentialSmoothing, SimpleExpSmoothing, Holt
 from prediction import Model
+from arima import Arima
 
 plt.style.use('fivethirtyeight')
 
@@ -39,6 +41,107 @@ def find_best():
 
     plt.legend()
     plt.show()
+
+
+def find_best_no_seasonal():
+    data1 = pd.read_csv("band.csv", index_col=0)
+
+    # reduce dataset
+    # data1 = data1[:800]
+
+    # Interpret index as timestamp
+    data1.index = pd.to_datetime(data1.index)
+
+    forecast = None
+
+    for count in range(0, len(data1)-150, 15):
+        training_data = data1[count:count+150]
+        model = Model(training_data, True)
+        model.fit_no_seasonal()
+        if count == 0:
+            forecast = model.predict_no_seasonal(15, 1)
+        else:
+            forecast = forecast.append(model.predict_no_seasonal(15, 1))
+
+    # save on file the predicted values
+    forecast.to_csv('pred-best-no-s.csv', sep=',')
+
+    ax = data1.plot(label='observed', figsize=(20, 15))
+    forecast.plot(ax=ax, label='Forecast')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Bandwidth [B/s]')
+
+    plt.legend()
+    plt.show()
+
+def garch():
+    data1 = pd.read_csv("band.csv", index_col=0)
+
+    # reduce dataset
+    # data1 = data1[:800]
+
+    # Interpret index as timestamp
+    data1.index = pd.to_datetime(data1.index)
+
+    forecast = None
+
+    for count in range(0, len(data1) - 150):
+        print(count)
+        training_data = data1[count:count + 150]
+        model = Arima(training_data)
+        model.fit_with_garch(150)
+        if count == 0:
+            forecast = model.predict_with_garch(1)
+        else:
+            forecast = forecast.append(model.predict_with_garch(1))
+
+    # save on file the predicted values
+    forecast.to_csv('pred-best-garch.csv', sep=',')
+    print(forecast.head())
+
+    ax = data1.plot(label='observed', figsize=(20, 15))
+    forecast.plot(ax=ax, label='Forecast')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Bandwidth [B/s]')
+
+    plt.legend()
+    plt.show()
+
+
+def holt_winters():
+    data1 = pd.read_csv("band.csv", index_col=0)
+    data1.index = pd.to_datetime(data1.index)
+    pred = None
+    warnings.filterwarnings("ignore")  # specify to ignore warning messages
+
+    for count in range(0, len(data1)-150, 15):
+        training_data = data1[count:count+150]
+        fit1 = ExponentialSmoothing(training_data['BW'], seasonal_periods=7, trend='add', seasonal='add', ).fit()
+        if count == 0:
+            forecast = fit1.forecast(15)
+            future_ts = [v + pd.to_timedelta(1 * (i + 1), unit='s')
+                         for i, v in enumerate([training_data.index[-1]] * 15)]
+            pred = pd.DataFrame(forecast.values, index=future_ts, columns=['Prediction'])
+        else:
+            forecast = fit1.forecast(15)
+            future_ts = [v + pd.to_timedelta(1 * (i + 1), unit='s')
+                         for i, v in enumerate([training_data.index[-1]] * 15)]
+            future_forecast = pd.DataFrame(forecast.values, index=future_ts, columns=['Prediction'])
+            print(future_forecast)
+            pred = pred.append(future_forecast)
+
+    # save on file the predicted values
+    pred.to_csv('pred-best-holt.csv', sep=',')
+    print(pred.head())
+
+    ax = data1.plot(label='observed', figsize=(20, 15))
+    pred.plot(ax=ax, label='Forecast')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Bandwidth (B/s)')
+
+    plt.legend()
+    plt.show()
+
 
 def compare_50():
     data1 = pd.read_csv("band.csv", index_col=0)
@@ -88,7 +191,11 @@ def compare_50():
     plt.legend()
     plt.show()
 
-find_best()
+
+# find_best()
+# find_best_no_seasonal()
+# garch()
+holt_winters()
 
 '''pred = results.get_prediction(start=150, dynamic=False)
 pred_ci = pred.conf_int()

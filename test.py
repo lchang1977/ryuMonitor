@@ -13,7 +13,11 @@ import csv
 import datetime
 
 evaluation = Measure()
-evaluation.plot_error()
+# evaluation.plot_error()
+# evaluation.ecdf_error()
+evaluation.compare_cdf()
+# evaluation.plot_forecast()
+# evaluation.histogram_error()
 
 '''
 plt.style.use('fivethirtyeight')
