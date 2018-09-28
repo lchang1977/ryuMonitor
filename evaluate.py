@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
+import numpy as np
 import matplotlib as mpl
 mpl.use('pdf')
 import matplotlib.pylab as plt
+import seaborn as sns
 from matplotlib import pyplot
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.arima_model import ARIMA
@@ -17,6 +19,8 @@ class Measure:
         self.forecast_no_s = pd.read_csv("pred-best-no-s.csv", index_col=0)
         self.forecast_garch = pd.read_csv("pred-best-garch.csv", index_col=0)
         self.forecast_holt = pd.read_csv("pred-best-holt.csv", index_col=0)
+        # Interpret index as timestamp
+        self.forecast.index = pd.to_datetime(self.forecast.index)
 
         self.data = pd.read_csv("band.csv", index_col=0)
         # Interpret index as timestamp
@@ -150,6 +154,10 @@ class Measure:
 
         fig.set_size_inches(width, height)
         fig.savefig('cdf_new.pdf')
+
+    @staticmethod
+    def reject_outliers(data, m=2):
+        return data[abs(data - np.mean(data)) < m * np.std(data)]
 
     def forecast_real(self):
         # pd.concat([self.test, future_forecast], axis=1).plot()

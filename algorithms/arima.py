@@ -16,7 +16,7 @@ class Arima:
         self.train = []
         self.test = []
 
-        print(data.head())
+        # print(data.head())
 
         # Interpret index as timestamp
         self.__data.index = pd.to_datetime(self.__data.index)
@@ -57,7 +57,7 @@ class Arima:
 
     def fit_with_garch(self, train_size):
         # Find the best ARIMA fit
-        res_tup = self._get_best_model(self.__data)
+        '''res_tup = self._get_best_model(self.__data)
         order = res_tup[1]
         model = res_tup[2]
 
@@ -70,24 +70,40 @@ class Arima:
         self.test = model.resid[train_size:]
 
         self.model = arch_model(self.train, p=p_, o=o_, q=q_)
-        self.res = self.model.fit(update_freq=5, disp='off')
-        print(self.res.summary())
+        self.res = self.model.fit(disp='off')
+        print(self.res.summary())'''
+        am = arch_model(self.__data)
 
-    def predict_with_garch(self):
-        forecasts = self.res.forecast(horizon=len(self.test), start=None, align='origin')
+        self.res = am.fit(disp='off')
+        # print(self.res.summary())
 
-        # This returns an array of predictions:
+    def predict_with_garch(self, sample_frequency):
+        forecasts = self.res.forecast(horizon=3, start=None, align='origin')
 
-        print(forecasts)
-
-        future_forecast = pd.DataFrame(forecasts, index=self.test.index, columns=['Prediction'])
-
-        pd.concat([self.test, future_forecast], axis=1).plot()
-        pd.concat([self.__data, future_forecast], axis=1).plot()
-
-        plt.show()
+        future_ts = [self.__data.index[-1] + pd.to_timedelta(sample_frequency , unit='s')]
+        # future_forecast = pd.DataFrame(forecasts, index=self.test.index, columns=['Prediction'])
+        future_forecast = pd.DataFrame(forecasts.mean.iloc[-1, 0], index=future_ts, columns=['Prediction'])
 
         return future_forecast
+
+    def _predict_var_gar(self, values):
+        garch11 = arch_model(values, p=1, q=1)
+        results = garch11.fit(update_freq=10)
+
+        print(results.summary())
+        forecasts = results.forecast(horizon=30, method='simulation')
+        sims = forecasts.simulations
+
+        lines = plt.plot(sims.values[-1, ::30].T, alpha=0.33)
+        lines[0].set_label('Simulated paths')
+        plt.plot()
+
+        print('Percentile')
+        print(np.percentile(sims.values[-1, 30].T, 5))
+        plt.hist(sims.values[-1, 30], bins=50)
+        plt.title('Distribution of Returns')
+
+        # plt.show()
 
     def fit(self, train_size='2016-12-01'):
         self.model = auto_arima(self.__data, start_p=1, start_q=1,
