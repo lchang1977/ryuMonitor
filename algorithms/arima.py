@@ -1,105 +1,76 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pylab as plt
-import statsmodels.tsa.api as smt
-from statsmodels.tsa.seasonal import seasonal_decompose
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import itertools
+import warnings
+import sys
 from pyramid.arima import auto_arima
-from arch import arch_model
+from statsmodels.tsa.arima_model import ARIMA
 
 
 class Arima:
 
     def __init__(self, data):
+        data = data.astype(float)
         self.__data = data
         self.model = {}
-        self.train = []
-        self.test = []
-
-        # print(data.head())
-
-        # Interpret index as timestamp
-        self.__data.index = pd.to_datetime(self.__data.index)
-
-        # Rename column
-        self.__data.columns = ['Energy Production']
-
-        '''plt.plot(self.__data)
+        self.results = []
+        print(self.__data.head())
+        plt.plot(self.__data)
+        # self.__data.plot()
         plt.show()
 
-        result = seasonal_decompose(self.__data, model='multiplicative')
-        fig = result.plot()
-        fig.show()'''
+    def fit(self):
+        warnings.filterwarnings("ignore")  # specify to ignore warning messages
 
-    def _get_best_model(self, ts, p_range=5, d_range=2):
-        best_aic = np.inf
-        best_order = None
-        best_mdl = None
+        print('Size {}'.format(len(self.__data)))
+        # Define the p, d and q parameters to take any value between 0 and 2
+        p = d = q = range(0, 3)
+        best_aic = sys.float_info.max
 
-        pq_rng = range(p_range)  # [0,1,2,3,4]
-        d_rng = range(d_range)  # [0,1]
-        for i in pq_rng:
-            for d in d_rng:
-                for j in pq_rng:
-                    try:
-                        tmp_mdl = smt.ARIMA(ts, order=(i, d, j)).fit(
-                            method='mle', trend='nc'
-                        )
-                        tmp_aic = tmp_mdl.aic
-                        if tmp_aic < best_aic:
-                            best_aic = tmp_aic
-                            best_order = (i, d, j)
-                            best_mdl = tmp_mdl
-                    except:
-                        continue
-        print('aic: {:6.5f} | order: {}'.format(best_aic, best_order))
-        return best_aic, best_order, best_mdl
+        # Generate all different combinations of p, q and q triplets
+        pdq = list(itertools.product(p, d, q))
 
-    def fit(self, train_size='2016-12-01'):
-        self.model = auto_arima(self.__data, start_p=1, start_q=1,
-                                         max_p=3, max_q=3, m=12,
-                                         start_P=0, seasonal=True,
-                                         d=1, D=1, trace=True,
-                                         error_action='ignore',
-                                         suppress_warnings=True,
-                                         stepwise=True)
+        for param in pdq:
+            try:
+                mod = ARIMA(self.__data, order=param)
 
-        print('Best found AIC: %f' % (self.model.aic()))
-        print('Arima model (%d, %d, %d) x (%d, %d, %d, %d) ' % (self.model.order[0],
-              self.model.order[1], self.model.order[2],
-              self.model.seasonal_order[0], self.model.seasonal_order[1],
-              self.model.seasonal_order[2], self.model.seasonal_order[3]))
+                res = mod.fit(disp=0)
+                print('ARIMA{} - AIC:{}'.format(param, res.aic))
+                if res.aic < best_aic:
+                    best_aic = res.aic
+                    self.model = mod
+            except:
+                continue
+
+        print('Best found AIC: %f' % best_aic)
 
         # self.train = self.__data.loc['1985-01-01':'2016-12-01']
         # self.test = self.__data.loc['2015-01-01':]
 
-        self.train = self.__data[:train_size]
-        if type(train_size) is str:
-            index = len(self.__data)
-            index = list(self.__data.index).index(pd.to_datetime(train_size))
-            if index >= 30:
-                index -= 30
-        elif train_size >= 30:
-            index = train_size - 30
-        else:
-            index = train_size
-        self.test = self.__data[index:]
+        self.results = self.model.fit(disp=0)
 
-        self.model.fit(self.train)
+    def show_and_save(self, forecast):
+        pd.concat([self.__data, forecast], axis=1).plot()
+        plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
+        plt.show()
 
-    def predict(self):
-        future_forecast = self.model.predict(n_periods=len(self.test))
+    def save_aic(self, start_ts, last_ts, line):
+        with open("past-aic.txt", "a") as file:
+            file.write('{}-{} :'.format(start_ts, last_ts))
+            file.write(line + '\n')
 
+    def predict(self, horizon, sample_frequency):
+        future_forecast = self.results.forecast(steps=horizon)
+
+        future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
+                     for i, v in enumerate([self.__data.index[-1]] * horizon)]
         # This returns an array of predictions:
 
         print(future_forecast)
 
-        future_forecast = pd.DataFrame(future_forecast, index=self.test.index, columns=['Prediction'])
+        future_forecast = pd.DataFrame(future_forecast[0], index=future_ts, columns=['Prediction'])
 
-        pd.concat([self.test, future_forecast], axis=1).plot()
-        pd.concat([self.__data, future_forecast], axis=1).plot()
-
-        plt.show()
+        self.show_and_save(future_forecast)
 
         return future_forecast
-
-
