@@ -46,24 +46,6 @@ class Sarima:
 
         self.results = self.model.fit(self.__data)
 
-    def use_best_fit(self):
-        # apply the model with best parameters found so far
-        if self._firstTime:
-            self.model = sm.tsa.statespace.SARIMAX(self.__data,
-                                                   order=(0, 1, 1),
-                                                   seasonal_order=(0, 1, 0, 12),
-                                                   enforce_stationarity=False,
-                                                   enforce_invertibility=False)
-            self._firstTime = False
-        else:
-            self.model = sm.tsa.statespace.SARIMAX(self.__data,
-                                                   order=(1, 1, 1),
-                                                   seasonal_order=(0, 1, 1, 12),
-                                                   enforce_stationarity=False,
-                                                   enforce_invertibility=False)
-
-        self.results = self.model.fit()
-
     def show_and_save(self, forecast):
         pd.concat([self.__data, forecast], axis=1).plot()
         plt.savefig('graph-{}.pdf'.format(forecast.index[0]))
@@ -73,20 +55,6 @@ class Sarima:
         with open("past-aic.txt", "a") as file:
             file.write('{}-{} :'.format(start_ts, last_ts))
             file.write(line + '\n')
-
-    def predict_with_best(self, horizon, sample_frequency):
-        pred = self.results.get_forecast(steps=horizon)
-
-        # Get confidence intervals of forecasts
-        pred_ci = pred.conf_int()
-
-        future_ts = [v + pd.to_timedelta(sample_frequency * (i + 1), unit='s')
-                     for i, v in enumerate([self.__data.index[-1]] * horizon)]
-        future_forecast = pd.DataFrame(pred.predicted_mean.values, index=future_ts, columns=['Prediction'])
-
-        self.show_and_save(future_forecast)
-
-        return future_forecast
 
     def predict(self, horizon, sample_frequency):
         future_forecast = self.model.predict(n_periods=horizon)

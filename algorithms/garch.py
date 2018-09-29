@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pylab as plt
-import statsmodels.tsa.api as smt
 from arch import arch_model
+
 
 class Garch:
 
@@ -21,7 +21,7 @@ class Garch:
         # Rename column
         self.__data.columns = ['BW']
 
-    def fit(self, train_size):
+    def fit(self):
         # Find the best ARIMA fit
         '''res_tup = self._get_best_model(self.__data)
         order = res_tup[1]
@@ -46,7 +46,7 @@ class Garch:
     def predict(self, sample_frequency):
         forecasts = self.res.forecast(horizon=3, start=None, align='origin')
 
-        future_ts = [self.__data.index[-1] + pd.to_timedelta(sample_frequency , unit='s')]
+        future_ts = [self.__data.index[-1] + pd.to_timedelta(sample_frequency, unit='s')]
         # future_forecast = pd.DataFrame(forecasts, index=self.test.index, columns=['Prediction'])
         future_forecast = pd.DataFrame(forecasts.mean.iloc[-1, 0], index=future_ts, columns=['Prediction'])
 

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
 
-class Sarima_best:
+class SarimaBest:
 
     def __init__(self, data):
         data = data.astype(float)
