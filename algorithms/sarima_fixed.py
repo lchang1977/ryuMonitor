@@ -5,12 +5,13 @@ import statsmodels.api as sm
 
 class SarimaBest:
 
-    def __init__(self, data):
+    def __init__(self, data, params):
         data = data.astype(float)
         self.__data = data
         self._firstTime = True
         self.model = {}
         self.results = []
+        self.params = params
         print(self.__data.head())
         plt.plot(self.__data)
         # self.__data.plot()

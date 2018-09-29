@@ -1,8 +1,4 @@
 from operator import attrgetter
-
-import matplotlib
-matplotlib.use('Agg')
-
 from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
@@ -10,12 +6,14 @@ from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
 from setup import OVS_lan_type
-from algorithms.prediction import Model
+from algorithms.sarima_fixed import SarimaBest
 from cloudlab import Cloudlab
 from config_reader import Reader
 
 import pandas as pd
 import datetime
+import matplotlib
+matplotlib.use('Agg')
 
 
 class SimpleMonitor13(app_manager.RyuApp):
@@ -117,7 +115,7 @@ class SimpleMonitor13(app_manager.RyuApp):
             key = (datapath_id, stat.port_no)
 
             # check if first packet
-            if key not in self.prev :
+            if key not in self.prev:
                 self.logger.info('First packet')
                 self.bws[key] = pd.DataFrame(data=[], columns=['BW'])
                 self.last_timestamp[key] = datetime.datetime.now()
@@ -145,13 +143,11 @@ class SimpleMonitor13(app_manager.RyuApp):
                     self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
 
     def _predict_arima(self, values):
-
-        arima = Model(values, self.config.save_aic())
+        arima = SarimaBest(values, self.config)
         # comment out here for choosing best params
-        # arima.fit()
-        # return arima.predict(self.forecast_size, self.time_interval)
-        arima.use_best_fit()
-        return arima.predict_with_best(self.forecast_size, self.time_interval)
+        # arima = Sarima(values, self.config.save_aic())
+        arima.fit()
+        return arima.predict(self.forecast_size, self.time_interval)
 
     def check_maximum(self, prediction, datapath, port):
         if max(prediction) > self.threshold:
