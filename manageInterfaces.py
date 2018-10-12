@@ -2,14 +2,8 @@
 # in particular it  moves all the traffic of ona flow (L2/L3)
 # to a different port. The choice of the new port, is outside this scope
 
-from config_reader import Reader
-
 
 class Interfaces:
-
-    def __init__(self, *args, **kwargs):
-        # read config file
-        self.config = Reader()
 
     @staticmethod
     def change_interface_l2(datapath, old_port, eth_src, eth_dst, new_port):
