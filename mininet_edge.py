@@ -27,8 +27,9 @@ class Configuration:
 
     def config_switche(self, datapath):
         print(datapath.id)
-        print(self.__ips[datapath.id])
-        print(self.__macs[datapath.id])
+        id = datapath.id - 1
+        print(self.__ips[id])
+        print(self.__macs[id])
 
 
     @staticmethod
