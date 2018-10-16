@@ -32,13 +32,13 @@ class Reader:
         return self.config.getint('SARIMA', 'best_q')
 
     def best_P(self):
-        return self.config.getint('SARIMA', 'best_P')
+        return self.config.getint('SARIMA', 'bestP')
 
     def best_D(self):
-        return self.config.getint('SARIMA', 'best_D')
+        return self.config.getint('SARIMA', 'bestD')
 
     def best_Q(self):
-        return self.config.getint('SARIMA', 'best_Q')
+        return self.config.getint('SARIMA', 'bestQ')
 
     def best_S(self):
-        return self.config.getint('SARIMA', 'best_S')
+        return self.config.getint('SARIMA', 'bestS')
