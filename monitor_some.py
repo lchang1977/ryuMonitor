@@ -1,9 +1,4 @@
 from operator import attrgetter
-from arch import arch_model
-
-import matplotlib
-matplotlib.use('Agg')
-
 from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
@@ -11,31 +6,26 @@ from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
 from setup import OVS_lan_type
-#from prediction import Model
+from algorithms.sarima_fixed import SarimaBest
 from cloudlab import Cloudlab
 from config_reader import Reader
-from threading import Thread
+from mininet_edge import Configuration
 
-import matplotlib.pylab as plt
-import numpy as np
 import pandas as pd
 import datetime
-import sys
+import matplotlib
+matplotlib.use('Agg')
 
 
-class SimpleMonitor(app_manager.RyuApp):
+class SimpleMonitor13(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
-        super(SimpleMonitor, self).__init__(*args, **kwargs)
-
-        print('Ciao')
-        print(len(sys.argv))
-
+        super(SimpleMonitor13, self).__init__(*args, **kwargs)
         # limit for bandwidth, if over react
         self.threshold = 2000.00
-        self.max_training_size = 150
+        self.max_training_size = 200
         # perform a prediction every X packets(measures)
-        self.freq_prediction = 20
+        self.freq_prediction = 18
         # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
@@ -50,7 +40,8 @@ class SimpleMonitor(app_manager.RyuApp):
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
         # change if different network topology
-        self.setup = OVS_lan_type()
+        # self.setup = OVS_lan_type()
+        self.setup = Configuration()
         # read config file
         self.config = Reader()
 
@@ -60,10 +51,12 @@ class SimpleMonitor(app_manager.RyuApp):
         datapath = ev.datapath
         if ev.state == MAIN_DISPATCHER:
             if datapath.id not in self.datapaths:
-                self.logger.debug('register datapath: %016x', datapath.id)
-                self.datapaths[datapath.id] = datapath
+                if datapath.id in self.config.switches_to_monitor():
+                    self.logger.debug('register datapath: %016x', datapath.id)
+                    self.datapaths[datapath.id] = datapath
                 # initialize datapath with default flows
-                self.setup.initialize(datapath)
+                # self.setup.initialize(datapath)
+                self.setup.config_switch(datapath)
 
         elif ev.state == DEAD_DISPATCHER:
             if datapath.id in self.datapaths:
@@ -126,7 +119,7 @@ class SimpleMonitor(app_manager.RyuApp):
             key = (datapath_id, stat.port_no)
 
             # check if first packet
-            if key not in self.prev :
+            if key not in self.prev:
                 self.logger.info('First packet')
                 self.bws[key] = pd.DataFrame(data=[], columns=['BW'])
                 self.last_timestamp[key] = datetime.datetime.now()
@@ -153,35 +146,12 @@ class SimpleMonitor(app_manager.RyuApp):
                 if stat.port_no in self.interested_port:
                     self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
 
-    def _predict_var_gar(self, values):
-
-        garch11 = arch_model(values, p=1, q=1)
-        results = garch11.fit(update_freq=10)
-
-        print(results.summary())
-
-        forecasts = results.forecast(horizon=30, method='simulation')
-        sims = forecasts.simulations
-
-        lines = plt.plot(sims.values[-1, ::30].T, alpha=0.33)
-        lines[0].set_label('Simulated paths')
-        plt.plot()
-
-        print('Percentile')
-        print(np.percentile(sims.values[-1, 30].T, 5))
-        plt.hist(sims.values[-1, 30], bins=50)
-        plt.title('Distribution of Returns')
-
-        plt.show()
-
     def _predict_arima(self, values):
-
-        arima = Model(values, self.config.save_aic())
+        arima = SarimaBest(values, self.config)
         # comment out here for choosing best params
-        # arima.fit()
-        # return arima.predict(self.forecast_size, self.time_interval)
-        arima.use_best_fit()
-        return arima.predict_with_best(self.forecast_size, self.time_interval)
+        # arima = Sarima(values, self.config.save_aic())
+        arima.fit()
+        return arima.predict(self.forecast_size, self.time_interval)
 
     def check_maximum(self, prediction, datapath, port):
         if max(prediction) > self.threshold:
@@ -199,7 +169,7 @@ class SimpleMonitor(app_manager.RyuApp):
     def _predict_and_save(self, datapath, port):
         key = (datapath.id, port)
         prediction = self._predict_arima(self.bws[key])
-        first_ts = prediction.index[1]
+        first_ts = prediction.index[0]
 
         # save on file the predicted values
         prediction.to_csv('prediction-{}-{}-{}.csv'.format(first_ts, datapath.id, port), sep=',')
@@ -235,16 +205,17 @@ class SimpleMonitor(app_manager.RyuApp):
         # save value for logging
         self._save_history(self.bws[key][-1:], switch_id, port)
 
-        # increment number updates and check if time to perform prediction
-        self.num_measure += 1
-        if self.num_measure == self.freq_prediction:
-            self.num_measure = 0
+        if not self.config.log_only():
+            # increment number updates and check if time to perform prediction
+            self.num_measure += 1
+            if self.num_measure == self.freq_prediction:
+                self.num_measure = 0
 
-            # create a new thread for ARIMA prediction
-            # self.prediction_thread = hub.spawn(self._predict, datapath, port)
-            print('Starting new thread')
-            thread = Thread(target=self._predict, args=(datapath, port))
-            thread.start()
+                # create a new thread for ARIMA prediction
+                self.prediction_thread = hub.spawn(self._predict, datapath, port)
+                '''print('Starting new thread')
+                thread = Thread(target=self._predict, args=(datapath, port))
+                thread.start()'''
 
 
 
