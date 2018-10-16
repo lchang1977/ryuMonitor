@@ -22,6 +22,9 @@ class Reader:
     def new_port(self):
         return self.config.getint('OVS', 'new_port')
 
+    def switches_to_monitor(self):
+        return self.config.get('OVS', 'switches_monitored')
+
     def best_p(self):
         return self.config.getint('SARIMA', 'best_p')
 
