@@ -9,6 +9,7 @@ from setup import OVS_lan_type
 from algorithms.sarima_fixed import SarimaBest
 from cloudlab import Cloudlab
 from config_reader import Reader
+from mininet_edge import Configuration
 
 import pandas as pd
 import datetime
@@ -39,7 +40,8 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.prev = {}
         self.monitor_thread = hub.spawn(self._monitor)
         # change if different network topology
-        self.setup = OVS_lan_type()
+        # self.setup = OVS_lan_type()
+        self.setup = Configuration()
         # read config file
         self.config = Reader()
 
@@ -52,7 +54,8 @@ class SimpleMonitor13(app_manager.RyuApp):
                 self.logger.debug('register datapath: %016x', datapath.id)
                 self.datapaths[datapath.id] = datapath
                 # initialize datapath with default flows
-                self.setup.initialize(datapath)
+                # self.setup.initialize(datapath)
+                self.setup.config_switche(datapath)
 
         elif ev.state == DEAD_DISPATCHER:
             if datapath.id in self.datapaths:

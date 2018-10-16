@@ -14,10 +14,10 @@ class Interfaces:
 
         actions = [parser.OFPActionOutput(new_port)]
 
-        Interfaces._add_flow(datapath, 4, match, actions)
+        Interfaces.add_flow(datapath, 4, match, actions)
         # in the future remove this
         match = parser.OFPMatch(eth_dst=eth_dst, eth_src=eth_src, out_port=old_port)
-        Interfaces._remove_flows(datapath, match, old_port)
+        Interfaces.remove_flows(datapath, match, old_port)
 
     @staticmethod
     def change_interface_l3(datapath, old_port, ip_src, ip_dst, new_port):
@@ -28,13 +28,13 @@ class Interfaces:
 
         actions = [parser.OFPActionOutput(new_port)]
 
-        Interfaces._add_flow(datapath, 4, match, actions)
+        Interfaces.add_flow(datapath, 4, match, actions)
         # in the future remove this
         match = parser.OFPMatch(ip_dst=ip_dst, ip_src=ip_src, out_port=old_port)
-        Interfaces._remove_flows(datapath, match, old_port)
+        Interfaces.remove_flows(datapath, match, old_port)
 
     @staticmethod
-    def _add_flow(datapath, priority, match, actions, buffer_id=None):
+    def add_flow(datapath, priority, match, actions, buffer_id=None):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
 
@@ -51,7 +51,7 @@ class Interfaces:
         print('Added new flow')
 
     @staticmethod
-    def _remove_flows(datapath, match, out_port=None):
+    def remove_flows(datapath, match, out_port=None):
         """Create OFP flow mod message to remove flows from table."""
         ofproto = datapath.ofproto
         # Delete the flow
