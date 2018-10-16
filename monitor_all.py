@@ -55,7 +55,7 @@ class SimpleMonitor13(app_manager.RyuApp):
                 self.datapaths[datapath.id] = datapath
                 # initialize datapath with default flows
                 # self.setup.initialize(datapath)
-                self.setup.config_switche(datapath)
+                self.setup.config_switch(datapath)
 
         elif ev.state == DEAD_DISPATCHER:
             if datapath.id in self.datapaths:

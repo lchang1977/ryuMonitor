@@ -25,7 +25,7 @@ class Configuration:
                        '3c:fd:fe:55:fe:60',     # s9
                        '3c:fd:fe:55:fe:60']     # s10
 
-    def config_switche(self, datapath):
+    def config_switch(self, datapath):
         print(datapath.id)
         id = datapath.id - 1
         print(self.__ips[id])
