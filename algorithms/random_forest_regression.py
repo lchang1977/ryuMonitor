@@ -2,16 +2,16 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 
 '''
 Non linear and non continuous regression model
-Powerful for more dimension
+Lot more steps compared to decision tree
 '''
 
 
-class DecisionTree:
+class RandomForest:
 
     def __init__(self, filename):
         dataset = pd.read_csv(filename)
@@ -33,7 +33,8 @@ class DecisionTree:
 
     def fit(self):
         # Fitting Decision Tree Regression to the dataset
-        self.regressor = DecisionTreeRegressor(random_state=0)
+        # Choose the best number of tree
+        self.regressor = RandomForestRegressor(n_estimators=10, random_state=0)
 
         # lin_reg.fit(self.X_train, self.y_test)
         self.regressor.fit(self.X, self.y)
@@ -44,7 +45,7 @@ class DecisionTree:
         X_grid = X_grid.reshape((len(X_grid), 1))
         plt.scatter(self.X, self.y, color='red')
         plt.plot(X_grid, self.regressor.predict(X_grid), color='blue')
-        plt.title('Truth or Bluff (Decision Tree Regression)')
+        plt.title('Truth or Bluff (Random Forest Regression)')
         plt.xlabel('Position level')
         plt.ylabel('Salary')
         plt.show()
