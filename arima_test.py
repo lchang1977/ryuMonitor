@@ -1,10 +1,10 @@
 import warnings
 import pandas as pd
 import matplotlib.pyplot as plt
-from algorithms.sarima import Sarima
-from algorithms.arima import Arima
-from algorithms.garch import Garch
-from algorithms.holt_winters import HoltWinters
+from algorithms.history_based.sarima import Sarima
+from algorithms.history_based.arima import Arima
+from algorithms.history_based.garch import Garch
+from algorithms.history_based.holt_winters import HoltWinters
 
 plt.style.use('fivethirtyeight')
 

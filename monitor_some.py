@@ -5,8 +5,7 @@ from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.lib import hub
 
-from setup import OVS_lan_type
-from algorithms.sarima_fixed import SarimaBest
+from algorithms.history_based.sarima_fixed import SarimaBest
 from cloudlab import Cloudlab
 from config_reader import Reader
 from mininet_edge import Configuration
