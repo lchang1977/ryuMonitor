@@ -2,13 +2,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import StandardScaler
 
 '''
-Non linear regression model
+Non linear and non continuous regression model
+Powerful for more dimension
 '''
-class Svr:
+class DecisionTree:
 
     def __init__(self, filename):
         dataset = pd.read_csv(filename)
@@ -20,33 +21,31 @@ class Svr:
 
         # splitting the dataset into the Training set and Test set
         '''from sklearn.model_selection import train_test_split
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=0)'''
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
         # Feature scaling
         self.sc_X = StandardScaler()
         self.sc_y = StandardScaler()
         self.X = self.sc_X.fit_transform(self.X)
-        self.y = self.sc_y.fit_transform(self.y)
+        self.y = self.sc_y.fit_transform(self.y)'''
 
     def fit(self):
-        # Fitting Support Vector Regression to the dataset
-        self.regressor = SVR(kernel='rbf')
+        # Fitting Decision Tree Regression to the dataset
+        self.regressor = DecisionTreeRegressor(random_state=0)
 
         # lin_reg.fit(self.X_train, self.y_test)
         self.regressor.fit(self.X, self.y)
 
     def show_(self):
-        # Visualizing the Support Vector Regression results
-        X_grid = np.arange(min(self.X), max(self.X), 0.1)
+        # Visualizing the Decision Tree Regression results
+        X_grid = np.arange(min(self.X), max(self.X), 0.01)
         X_grid = X_grid.reshape((len(X_grid), 1))
         plt.scatter(self.X, self.y, color='red')
-        # We don't use X_poly, so this block of code ,ca ne generalized changing data to show
         plt.plot(X_grid, self.regressor.predict(X_grid), color='blue')
-        plt.title('Truth or Bluff (SVR Model)')
+        plt.title('Truth or Bluff (Decision Tree Regression)')
         plt.xlabel('Position level')
         plt.ylabel('Salary')
         plt.show()
 
     def predict(self, value=6.5):
-        y_pred = self.regressor.predict(self.sc_X.transform(np.array([[value]])))
-        return self.sc_y.inverse_transform(y_pred)
+        return self.regressor.predict(value)

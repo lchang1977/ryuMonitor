@@ -21,12 +21,7 @@ class Regression:
         # splitting the dataset into the Training set and Test set
         '''from sklearn.model_selection import train_test_split
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
-        # Feature scaling
-        from sklearn.preprocessing import StandardScaler
-        sc_X = StandardScaler()
-        self.X_train = sc_X.fit_transform(self.X_train)
-        self.X_test = sc_X.fit_transform(self.X_test)'''
+        '''
 
     def linear_fit(self):
         # Fitting Linear Regression to the dataset
@@ -56,7 +51,7 @@ class Regression:
         plt.show()
 
     def show_polynomial(self):
-        # Visualizing the Polynomial Rregression results
+        # Visualizing the Polynomial Regression results
         X_grid = np.arange(min(self.X), max(self.X), 0.1)
         X_grid = X_grid.reshape((len(X_grid), 1))
         plt.scatter(self.X, self.y, color='red')
