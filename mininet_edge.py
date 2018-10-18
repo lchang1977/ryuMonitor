@@ -45,7 +45,17 @@ class Configuration:
         self.options[id](datapath)
 
     def __s1(self, datapath):
-        self.add_l2_flow(datapath, self.__macs[1], "s1-eth3")
+        self.add_l2_flow(datapath, self.__macs[1], 3)
+        self.add_l2_flow(datapath, self.__macs[2], 4)
+        self.add_l2_flow(datapath, self.__macs[3], 2)
+        self.add_l2_flow(datapath, self.__macs[4], 3)
+        self.add_l2_flow(datapath, self.__macs[5], 1)
+        self.add_l2_flow(datapath, self.__macs[6], 2)
+        self.add_l2_flow(datapath, self.__macs[7], 2)
+        self.add_l2_flow(datapath, self.__macs[8], 2)
+        self.add_l2_flow(datapath, self.__macs[9], 2)
+        self.add_l2_flow(datapath, self.__macs[10], 3)
+        '''self.add_l2_flow(datapath, self.__macs[1], "s1-eth3")
         self.add_l2_flow(datapath, self.__macs[2], "s1-eth4")
         self.add_l2_flow(datapath, self.__macs[3], "s1-eth2")
         self.add_l2_flow(datapath, self.__macs[4], "s1-eth3")
@@ -54,7 +64,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[7], "s1-eth2")
         self.add_l2_flow(datapath, self.__macs[8], "s1-eth2")
         self.add_l2_flow(datapath, self.__macs[9], "s1-eth2")
-        self.add_l2_flow(datapath, self.__macs[10], "s1-eth3")
+        self.add_l2_flow(datapath, self.__macs[10], "s1-eth3")'''
 
     # IMPORTANT!!
     def __s2(self, datapath):
