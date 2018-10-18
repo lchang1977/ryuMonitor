@@ -171,8 +171,12 @@ class Configuration:
         parser = datapath.ofproto_parser
         actions = [parser.OFPActionOutput(out_port)]
 
-        if mac_src:
+        if in_port and mac_src:
             match = parser.OFPMatch(in_port=in_port, eth_dst=mac_dst, eth_src=mac_src)
-        else:
+        elif in_port:
             match = parser.OFPMatch(in_port=in_port, eth_dst=mac_dst)
+        elif mac_src:
+            match = parser.OFPMatch(eth_dst=mac_dst, eth_src=mac_src)
+        else:
+            match = parser.OFPMatch(eth_dst=mac_dst)
         Interfaces.add_flow(datapath, 1, match, actions)
