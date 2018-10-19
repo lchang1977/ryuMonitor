@@ -113,7 +113,7 @@ class Configuration:
     def __s6(self, datapath):
         self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 1)
-        self.add_l2_flow(datapath, self.__macs[2], 4)
+        self.add_l2_flow(datapath, self.__macs[2], 2)
         self.add_l2_flow(datapath, self.__macs[3], 3)
         self.add_l2_flow(datapath, self.__macs[4], 3)
         self.add_l2_flow(datapath, self.__macs[5], 2)
