@@ -45,6 +45,7 @@ class Configuration:
         self.options[switch_id](datapath)
 
     def __s1(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 3)
         self.add_l2_flow(datapath, self.__macs[2], 4)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -58,6 +59,7 @@ class Configuration:
 
     # IMPORTANT!!
     def __s2(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 4)
         self.add_l2_flow(datapath, self.__macs[2], 4)
         self.add_l2_flow(datapath, self.__macs[3], 5)
@@ -70,6 +72,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 5)
 
     def __s3(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 2)
         self.add_l2_flow(datapath, self.__macs[2], 2)
         self.add_l2_flow(datapath, self.__macs[3], 1)
@@ -82,6 +85,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 2)
 
     def __s4(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 2)
         self.add_l2_flow(datapath, self.__macs[2], 2)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -94,6 +98,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 2)
 
     def __s5(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 2)
         self.add_l2_flow(datapath, self.__macs[2], 2)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -106,6 +111,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 2)
 
     def __s6(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 1)
         self.add_l2_flow(datapath, self.__macs[2], 4)
         self.add_l2_flow(datapath, self.__macs[3], 3)
@@ -119,6 +125,7 @@ class Configuration:
 
     # IMPORTANT!!
     def __s7(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 3)
         self.add_l2_flow(datapath, self.__macs[2], 3)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -131,6 +138,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 1)
 
     def __s8(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 1)
         self.add_l2_flow(datapath, self.__macs[2], 1)
         self.add_l2_flow(datapath, self.__macs[3], 1)
@@ -143,6 +151,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 1)
 
     def __s9(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 2)
         self.add_l2_flow(datapath, self.__macs[2], 1)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -155,6 +164,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[10], 2)
 
     def __s10(self, datapath):
+        self.add_default_flow(datapath)
         self.add_l2_flow(datapath, self.__macs[1], 4)
         self.add_l2_flow(datapath, self.__macs[2], 1)
         self.add_l2_flow(datapath, self.__macs[3], 2)
@@ -180,3 +190,14 @@ class Configuration:
         else:
             match = parser.OFPMatch(eth_dst=mac_dst)
         Interfaces.add_flow(datapath, 1, match, actions)
+
+    @staticmethod
+    def add_default_flow(datapath):
+        parser = datapath.ofproto_parser
+        ofproto = datapath.ofproto
+
+        # install the table-miss flow entry.
+        match = parser.OFPMatch()
+        actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
+                                          ofproto.OFPCML_NO_BUFFER)]
+        Interfaces.add_flow(datapath, 0, match, actions)
