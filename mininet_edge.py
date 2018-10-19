@@ -39,10 +39,10 @@ class Configuration:
 
     def config_switch(self, datapath):
         print(datapath.id)
-        id = datapath.id
-        print(self.__ips[id])
-        print(self.__macs[id])
-        self.options[id](datapath)
+        switch_id = datapath.id
+        print(self.__ips[switch_id])
+        print(self.__macs[switch_id])
+        self.options[switch_id](datapath)
 
     def __s1(self, datapath):
         self.add_l2_flow(datapath, self.__macs[1], 3)
