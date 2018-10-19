@@ -24,9 +24,7 @@ class Reader:
 
     def switches_to_monitor(self):
         list_sw = self.config.get('OVS', 'switches_monitored').split(',')
-        print(list_sw)
         list_sw = list(map(int, list_sw))
-        print(list_sw)
         return list_sw
 
     def best_p(self):

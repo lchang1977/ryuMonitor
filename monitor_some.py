@@ -51,7 +51,6 @@ class SimpleMonitor13(app_manager.RyuApp):
         if ev.state == MAIN_DISPATCHER:
             if datapath.id not in self.datapaths:
                 if datapath.id in self.config.switches_to_monitor():
-                    print('Id in the list')
                     self.logger.debug('register datapath: %016x', datapath.id)
                     self.datapaths[datapath.id] = datapath
                 # initialize datapath with default flows
