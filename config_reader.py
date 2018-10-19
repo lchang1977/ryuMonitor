@@ -23,6 +23,8 @@ class Reader:
         return self.config.getint('OVS', 'new_port')
 
     def switches_to_monitor(self):
+        print(self.config.get('OVS', 'switches_monitored'))
+        print(self.config.get('OVS', 'switches_monitored').split(','))
         return self.config.get('OVS', 'switches_monitored').split(',')
 
     def best_p(self):
