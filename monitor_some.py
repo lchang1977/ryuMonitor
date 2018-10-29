@@ -11,6 +11,7 @@ from config_reader import Reader
 from mininet_edge import Configuration
 
 import pandas as pd
+import numpy as np
 import datetime
 import matplotlib
 matplotlib.use('Agg')
@@ -79,9 +80,13 @@ class SimpleMonitor13(app_manager.RyuApp):
         req = parser.OFPPortStatsRequest(datapath, 0, ofproto.OFPP_ANY)
         datapath.send_msg(req)
 
+        req = parser.OFPAggregateStatsRequest(datapath, 0, ofproto.OFPP_ANY)
+        datapath.send_msg(req)
+
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _flow_stats_reply_handler(self, ev):
         body = ev.msg.body
+        datapath_id = ev.msg.datapath.id
         self.last_flows = body
 
         self.logger.info('datapath         '
@@ -93,10 +98,24 @@ class SimpleMonitor13(app_manager.RyuApp):
         for stat in sorted([flow for flow in body if flow.priority == 1],
                            key=lambda flow: (flow.match['eth_dst'])):
             self.logger.info('%016x %17s %8x %8d %8d',
-                             ev.msg.datapath.id,
+                             datapath_id,
                              stat.match['eth_dst'],
                              stat.instructions[0].actions[0].port,
                              stat.packet_count, stat.byte_count)
+            if stat.match['eth_dst'] in self.config.macs_to_monitor():
+                self.save_flow_info(datetime.datetime.now(), datapath_id, stat.match['eth_dst'], stat.byte_count)
+
+    @set_ev_cls(ofp_event.EventOFPAggregateStatsReply, MAIN_DISPATCHER)
+    def aggregate_stats_reply_handler(self, ev):
+        body = ev.msg.body
+        datapath_id = ev.msg.datapath.id
+        byte_count = body.byte_count
+        packet_count = body.packet_count
+
+        self.logger.info('AggregateStats: datapath=%d packet_count=%d byte_count=%d '
+                         'flow_count=%d',
+                         datapath_id, packet_count, byte_count, body.flow_count)
+        self.save_switch_info(datetime.datetime.now(), datapath_id, packet_count, byte_count)
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
@@ -106,10 +125,12 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.logger.info('datapath         port     '
                          'rx-pkts  rx-bytes rx-error '
                          'tx-pkts  tx-bytes tx-error '
+                         'rx_dropped    tx_dropped '
                          'rx-bndwth[B/s]    tx-bndwth[B/s]')
         self.logger.info('---------------- -------- '
                          '-------- -------- -------- '
                          '-------- -------- -------- '
+                         '----------    --------- '
                          '--------------    -------------')
         for stat in sorted(body, key=attrgetter('port_no')):
             rx_bytes = stat.rx_bytes
@@ -132,10 +153,11 @@ class SimpleMonitor13(app_manager.RyuApp):
                 print('Elapsed : {} s'.format(s))
                 rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / s
                 tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / s
-                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %.2f %.2f',
+                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %8d %8d %.2f %.2f',
                                  datapath_id, stat.port_no,
                                  stat.rx_packets, rx_bytes, stat.rx_errors,
                                  stat.tx_packets, tx_bytes, stat.tx_errors,
+                                 stat.rx_dropped, stat.tx_dropped,
                                  rx_bw, tx_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
@@ -175,9 +197,20 @@ class SimpleMonitor13(app_manager.RyuApp):
         # save on file the predicted values for logging purpose
         prediction.to_csv('prediction-{}-{}.csv'.format(datapath.id, port), mode='a', header=False, sep=',')
 
-    def _save_history(self, data, switch_id, port):
+    @staticmethod
+    def save_switch_info(date, switch_id, packet_count, byte_count):
+        data = pd.DataFrame(data=np.array([[date, packet_count, byte_count]]))
+        data.to_csv('{}-{}.csv'.format('switch', switch_id), mode='a', header=False, sep=',')
+
+    @staticmethod
+    def save_flow_info(date, switch_id, mac_dst, byte_count):
+        data = pd.DataFrame(data=np.array([[date, mac_dst, byte_count]]))
+        data.to_csv('{}-{}.csv'.format('switch', switch_id), mode='a', header=False, sep=',')
+
+    @staticmethod
+    def _save_history(data, switch_id, port):
         data.to_csv('{}-{}-{}.csv'.format('history', switch_id, port),
-                                  mode='a', header=False, sep=',')
+                    mode='a', header=False, sep=',')
 
     def _predict(self, datapath, port):
         # read file for next method
@@ -214,6 +247,3 @@ class SimpleMonitor13(app_manager.RyuApp):
                 '''print('Starting new thread')
                 thread = Thread(target=self._predict, args=(datapath, port))
                 thread.start()'''
-
-
-
