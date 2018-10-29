@@ -29,7 +29,6 @@ class Reader:
 
     def macs_to_monitor(self):
         list_macs = self.config.get('OVS', 'macs_interested').split(',')
-        list_macs = list(map(int, list_macs))
         return list_macs
 
     def best_p(self):

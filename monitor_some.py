@@ -80,7 +80,14 @@ class SimpleMonitor13(app_manager.RyuApp):
         req = parser.OFPPortStatsRequest(datapath, 0, ofproto.OFPP_ANY)
         datapath.send_msg(req)
 
-        req = parser.OFPAggregateStatsRequest(datapath, 0, ofproto.OFPP_ANY)
+        cookie = cookie_mask = 0
+        match = parser.OFPMatch(in_port=1)
+        req = parser.OFPAggregateStatsRequest(datapath, 0,
+                                              ofproto.OFPTT_ALL,
+                                              ofproto.OFPP_ANY,
+                                              ofproto.OFPG_ANY,
+                                              cookie, cookie_mask,
+                                              match)
         datapath.send_msg(req)
 
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
