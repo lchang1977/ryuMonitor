@@ -81,7 +81,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         datapath.send_msg(req)
 
         cookie = cookie_mask = 0
-        match = parser.OFPMatch(in_port=1)
+        match = parser.OFPMatch()
         req = parser.OFPAggregateStatsRequest(datapath, 0,
                                               ofproto.OFPTT_ALL,
                                               ofproto.OFPP_ANY,
