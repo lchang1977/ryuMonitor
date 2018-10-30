@@ -137,7 +137,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.logger.info('---------------- -------- '
                          '-------- -------- -------- '
                          '-------- -------- -------- '
-                         '---------- --------- '
+                         '----------  --------- '
                          '--------------    -------------')
         for stat in sorted(body, key=attrgetter('port_no')):
             rx_bytes = stat.rx_bytes
@@ -212,7 +212,7 @@ class SimpleMonitor13(app_manager.RyuApp):
     @staticmethod
     def save_flow_info(date, switch_id, mac_dst, byte_count):
         data = pd.DataFrame(data=np.array([[date, mac_dst, byte_count]]))
-        data.to_csv('{}-{}.csv'.format('flows', switch_id), mode='a', header=False, sep=',')
+        data[:, 1:].to_csv('{}-{}.csv'.format('flows', switch_id), mode='a', header=False, sep=',')
 
     @staticmethod
     def _save_history(data, switch_id, port):
