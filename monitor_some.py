@@ -132,7 +132,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.logger.info('datapath         port     '
                          'rx-pkts  rx-bytes rx-error '
                          'tx-pkts  tx-bytes tx-error '
-                         'rx_dropped   tx_dropped '
+                         'rx_dropped  tx_dropped '
                          'rx-bndwth[B/s]    tx-bndwth[B/s]')
         self.logger.info('---------------- -------- '
                          '-------- -------- -------- '
@@ -160,7 +160,7 @@ class SimpleMonitor13(app_manager.RyuApp):
                 print('Elapsed : {} s'.format(s))
                 rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / s
                 tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / s
-                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %8d %8d %.2f %.2f',
+                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %10d %10d %8.2f %8.2f',
                                  datapath_id, stat.port_no,
                                  stat.rx_packets, rx_bytes, stat.rx_errors,
                                  stat.tx_packets, tx_bytes, stat.tx_errors,
