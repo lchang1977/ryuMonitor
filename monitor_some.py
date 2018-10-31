@@ -29,7 +29,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
-        self.interested_port = [1]
+        self.interested_port = [2]
         self.filename = 'bandwidth'
         self.last_flows = None
         self.last_timestamp = {}
@@ -212,7 +212,7 @@ class SimpleMonitor13(app_manager.RyuApp):
     @staticmethod
     def save_flow_info(date, switch_id, mac_dst, byte_count):
         data = pd.DataFrame(data=np.array([[date, mac_dst, byte_count]]))
-        data.iloc[:, 1:].to_csv('{}-{}.csv'.format('flows', switch_id), mode='a', header=False, sep=',')
+        data.to_csv('{}-{}.csv'.format('flows', switch_id), mode='a', header=False, sep=',')
 
     @staticmethod
     def _save_history(data, switch_id, port):

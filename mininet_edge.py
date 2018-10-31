@@ -13,7 +13,8 @@ class Configuration:
                       7: '10.0.0.7',       # h7
                       8: '10.0.0.8',       # h8
                       9: '10.0.0.9',       # h9
-                      10: '10.0.0.10'}     # h10
+                      10: '10.0.0.10',     # h10
+                      11: '10.0.0.20'}     # NAT
         self.__macs = {1: 'f6:c0:28:8f:a5:9a',     # h1
                        2: 'd2:77:87:57:5d:69',     # h2
                        3: '8a:ae:bc:42:55:d8',     # h3
@@ -23,7 +24,8 @@ class Configuration:
                        7: '72:9e:d8:59:8b:d0',     # h7
                        8: '1e:75:d8:41:51:f9',     # h8
                        9: '4a:e2:74:fa:3e:c7',     # h9
-                       10: 'ba:a7:e7:40:7e:95'}    # h10
+                       10: 'ba:a7:e7:40:7e:95',    # h10
+                       11: '42:ef:43:7c:76:0d'}    # NAT
 
         # map the inputs to the function blocks
         self.options = {1: self.__s1,
@@ -56,6 +58,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 3)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     # IMPORTANT!!
     def __s2(self, datapath):
@@ -70,6 +73,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 5)
         self.add_l2_flow(datapath, self.__macs[9], 3)
         self.add_l2_flow(datapath, self.__macs[10], 5)
+        self.add_l2_flow(datapath, self.__macs[11], 5)
 
     def __s3(self, datapath):
         self.add_default_flow(datapath)
@@ -83,6 +87,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 2)
+        self.add_l2_flow(datapath, self.__macs[11], 3)
 
     def __s4(self, datapath):
         self.add_default_flow(datapath)
@@ -96,6 +101,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 2)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     def __s5(self, datapath):
         self.add_default_flow(datapath)
@@ -109,6 +115,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 1)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 2)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     def __s6(self, datapath):
         self.add_default_flow(datapath)
@@ -122,6 +129,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 3)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 3)
+        self.add_l2_flow(datapath, self.__macs[11], 3)
 
     # IMPORTANT!!
     def __s7(self, datapath):
@@ -136,6 +144,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 3)
         self.add_l2_flow(datapath, self.__macs[10], 1)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     def __s8(self, datapath):
         self.add_default_flow(datapath)
@@ -149,6 +158,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 1)
         self.add_l2_flow(datapath, self.__macs[10], 1)
+        self.add_l2_flow(datapath, self.__macs[11], 1)
 
     def __s9(self, datapath):
         self.add_default_flow(datapath)
@@ -162,6 +172,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 2)
         self.add_l2_flow(datapath, self.__macs[9], 2)
         self.add_l2_flow(datapath, self.__macs[10], 2)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     def __s10(self, datapath):
         self.add_default_flow(datapath)
@@ -175,6 +186,7 @@ class Configuration:
         self.add_l2_flow(datapath, self.__macs[8], 5)
         self.add_l2_flow(datapath, self.__macs[9], 1)
         self.add_l2_flow(datapath, self.__macs[10], 4)
+        self.add_l2_flow(datapath, self.__macs[11], 2)
 
     @staticmethod
     def add_l2_flow(datapath, mac_dst, out_port, in_port=None, mac_src=None):
