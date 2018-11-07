@@ -29,7 +29,7 @@ class SimpleMonitor13(app_manager.RyuApp):
         # forecast horizon
         self.forecast_size = 15
         self.num_measure = 0
-        self.interested_port = [4]
+        self.interested_port = [5]
         self.filename = 'bandwidth'
         self.last_flows = None
         self.last_timestamp = {}
