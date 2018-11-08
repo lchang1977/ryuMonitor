@@ -133,12 +133,14 @@ class SimpleMonitor13(app_manager.RyuApp):
                          'rx-pkts  rx-bytes rx-error '
                          'tx-pkts  tx-bytes tx-error '
                          'rx_dropped  tx_dropped '
-                         'rx-bndwth[B/s]    tx-bndwth[B/s]')
+                         'rx-bndwth[B/s]    tx-bndwth[B/s]'
+                         'bndwth[KB/s]')
         self.logger.info('---------------- -------- '
                          '-------- -------- -------- '
                          '-------- -------- -------- '
                          '----------  --------- '
-                         '--------------    -------------')
+                         '--------------    -------------  '
+                         '--------------')
         for stat in sorted(body, key=attrgetter('port_no')):
             rx_bytes = stat.rx_bytes
             tx_bytes = stat.tx_bytes
@@ -152,6 +154,7 @@ class SimpleMonitor13(app_manager.RyuApp):
                 self.prev[key] = {}
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
+                self.prev[key]['prev'] = rx_bytes + tx_bytes
             # else calculate bandwidth
             else:
                 current = datetime.datetime.now()
@@ -160,18 +163,20 @@ class SimpleMonitor13(app_manager.RyuApp):
                 print('Elapsed : {} s'.format(s))
                 rx_bw = (rx_bytes - self.prev[key]['prev_rx']) / s
                 tx_bw = (tx_bytes - self.prev[key]['prev_tx']) / s
-                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %10d %10d %8.2f %8.2f',
+                total_bw = ((tx_bytes + rx_bytes - self.prev[key]['prev']) / 1024) / s
+                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d %10d %10d %8.2f %8.2f %8.2f',
                                  datapath_id, stat.port_no,
                                  stat.rx_packets, rx_bytes, stat.rx_errors,
                                  stat.tx_packets, tx_bytes, stat.tx_errors,
                                  stat.rx_dropped, stat.tx_dropped,
-                                 rx_bw, tx_bw)
+                                 rx_bw, tx_bw, total_bw)
                 self.prev[key]['prev_rx'] = rx_bytes
                 self.prev[key]['prev_tx'] = tx_bytes
+                self.prev[key]['prev'] = rx_bytes + tx_bytes
                 self.last_timestamp[key] = current
 
                 if stat.port_no in self.interested_port:
-                    self.__add_item(rx_bw, datapath_id, stat.port_no, ev.msg.datapath)
+                    self.__add_item(total_bw, datapath_id, stat.port_no, ev.msg.datapath)
 
     def _predict_arima(self, values):
         arima = SarimaBest(values, self.config)
