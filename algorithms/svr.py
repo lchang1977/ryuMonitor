@@ -12,13 +12,12 @@ Non linear regression model
 
 class Svr:
 
-    def __init__(self, filename):
-        dataset = pd.read_csv(filename)
+    def __init__(self, features, output):
         self.regressor = None
         # x includes the features, as matrix, e.g. #bathroom, sq.feet, ...
-        self.X = dataset.iloc[:, 1:2].values
+        self.X = features
         # y is the value to predict
-        self.y = dataset.iloc[:, 2].values
+        self.y = output
 
         # splitting the dataset into the Training set and Test set
         '''from sklearn.model_selection import train_test_split
@@ -28,7 +27,7 @@ class Svr:
         self.sc_X = StandardScaler()
         self.sc_y = StandardScaler()
         self.X = self.sc_X.fit_transform(self.X)
-        self.y = self.sc_y.fit_transform(self.y)
+        self.y = self.sc_y.fit_transform(self.y.reshape(-1, 1))
 
     def fit(self):
         # Fitting Support Vector Regression to the dataset
@@ -50,5 +49,8 @@ class Svr:
         plt.show()
 
     def predict(self, value=6.5):
-        y_pred = self.regressor.predict(self.sc_X.transform(np.array([[value]])))
+        if type(value) is np.ndarray:
+            y_pred = self.regressor.predict(self.sc_X.transform(value))
+        else:
+            y_pred = self.regressor.predict(self.sc_X.transform(np.array([[value]])))
         return self.sc_y.inverse_transform(y_pred)

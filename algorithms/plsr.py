@@ -9,13 +9,12 @@ from sklearn.preprocessing import StandardScaler
 # Partial least squares regression (PLS regression)
 class Plsr:
 
-    def __init__(self, filename):
-        dataset = pd.read_csv(filename)
+    def __init__(self, features, output):
         self.regressor = None
         # x includes the features, as matrix, e.g. #bathroom, sq.feet, ...
-        self.X = dataset.iloc[:, 1:2].values
+        self.X = features
         # y is the value to predict
-        self.y = dataset.iloc[:, 2].values
+        self.y = output
 
         # splitting the dataset into the Training set and Test set
         '''from sklearn.model_selection import train_test_split

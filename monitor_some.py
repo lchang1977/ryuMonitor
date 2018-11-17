@@ -24,7 +24,8 @@ class SimpleMonitor13(app_manager.RyuApp):
         # limit for bandwidth, if over react
         self.threshold = 2000.00
         self.max_training_size = 200
-        # perform a prediction every X packets(measures)
+        # perform a prediction every Y packets, epochs
+        # this means every Y*epoch seconds
         self.freq_prediction = 18
         # forecast horizon
         self.forecast_size = 15
@@ -33,8 +34,8 @@ class SimpleMonitor13(app_manager.RyuApp):
         self.filename = 'bandwidth'
         self.last_flows = None
         self.last_timestamp = {}
-        # perform request to switch every X second
-        self.time_interval = 1
+        # perform request to switch every X seconds
+        self.time_interval = 6
         self.bws = {}
         self.datapaths = {}
         self.prev = {}

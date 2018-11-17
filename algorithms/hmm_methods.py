@@ -57,6 +57,52 @@ class HmmMethods:
         return path, delta, phi
 
     @staticmethod
+    def viterbi_log(pi, a, b, obs):
+        """Find the likeliest path in a hidden Markov Model resulting in the
+        given events.
+
+        Arguments:
+        pi: arraylike(n) --- probability of starting in each state
+        a: arraylike(n, n) -- probability of transition between states
+        b: arraylike(n, e) -- probability of emitting each event in
+            each state
+        obs -- iterable of events
+
+        Returns:
+        path: list(int) -- list of states in the most probable path
+        p: float -- log-likelihood of that path
+
+        """
+        # Use log-likelihoods to avoid floating-point underflow. Note that
+        # we want -inf for the log of zero, so suppress warnings here.
+        with np.errstate(divide='ignore'):
+            initial = np.log10(pi)
+            transition = np.log10(a)
+            emission = np.log10(b)
+
+        # List of arrays giving most likely previous state for each state.
+        prev = []
+
+        events = iter(obs)
+        logprob = initial + emission[:, next(events)]
+        for event in events:
+            # p[i, j] is log-likelihood of being in state j, having come from i.
+            p = logprob[:, np.newaxis] + transition + emission[:, event]
+            prev.append(np.argmax(p, axis=0))
+            logprob = np.max(p, axis=0)
+
+        # Most likely final state.
+        best_state = np.argmax(logprob)
+
+        # Reconstruct path by following links and then reversing.
+        state = best_state
+        path = [state]
+        for p in reversed(prev):
+            state = p[state]
+            path.append(state)
+        return path[::-1], logprob[best_state]
+
+    @staticmethod
     def baumWelch(o, N, dirichlet=False, verbose=False, rand_seed=1):
         # Implements HMM Baum-Welch algorithm
 
