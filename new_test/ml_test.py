@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from algorithms import svr
+from algorithms import svr, gpr, regression, random_forest_regression, decision_tree_regression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
@@ -26,12 +26,39 @@ def svr_test(features_train, features_test, output_train, output_test):
 
 
 def gpr_test(features_train, features_test, output_train, output_test):
-    method = svr.Svr(features_train, output_train)
+    method = gpr.Gpr(features_train, output_train)
+    method.fit()
+    output_predicted, mse = method.predict(features_test)
+    print('GPR MSE : {}'.format(mse))
+    return mse
+
+
+def poly_regression_test(features_train, features_test, output_train, output_test):
+    method = regression.Regression(features_train, output_train)
     method.fit()
     output_predicted = method.predict(features_test)
     mse = mean_squared_error(output_test, output_predicted)
-    print('SVR MSE : {}'.format(mse))
+    print('Polynomial Regression MSE : {}'.format(mse))
     return mse
+
+
+def linear_regression_test(features_train, features_test, output_train, output_test):
+    method = regression.Regression(features_train, output_train)
+    method.linear_fit()
+    output_predicted = method.linear_predict(features_test)
+    mse = mean_squared_error(output_test, output_predicted)
+    print('Linear Regression MSE : {}'.format(mse))
+    return mse
+
+
+def random_forest_test(features_train, features_test, output_train, output_test):
+    method = random_forest_regression.RandomForest(features_train, output_train)
+    method.fit()
+    output_predicted = method.predict(features_test)
+    mse = mean_squared_error(output_test, output_predicted)
+    print('Random Forest Regression MSE : {}'.format(mse))
+    return mse
+
 
 if __name__ == "__main__":
     data = load_data()
@@ -43,3 +70,8 @@ if __name__ == "__main__":
     features_train, features_test, output_train, output_test = train_test_split(features, output,
                                                                                 test_size=0.2, random_state=0)
     svr_test(features_train, features_test, output_train, output_test)
+    poly_regression_test(features_train, features_test, output_train, output_test)
+    linear_regression_test(features_train, features_test, output_train, output_test)
+    random_forest_test(features_train, features_test, output_train, output_test)
+    # ERROR WITH GPR!!!!!!!!!!!!
+    # gpr_test(features_train, features_test, output_train, output_test)
