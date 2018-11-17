@@ -37,7 +37,7 @@ class Gpr:
         plt.figure()
         plt.plot(self.X, self.y, 'r.', markersize=10, label=u'Observations')
         plt.plot(x, y_pred, 'b-', label=u'Prediction')
-        plt.fill(np.concatenate([self.x, x[::-1]]),
+        plt.fill(np.concatenate([self.X, x[::-1]]),
                  np.concatenate([y_pred - 1.9600 * sigma,
                                  (y_pred + 1.9600 * sigma)[::-1]]),
                  alpha=.5, fc='b', ec='None', label='95% confidence interval')

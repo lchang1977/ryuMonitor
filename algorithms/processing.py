@@ -5,7 +5,8 @@ from datetime import timezone
 
 from sklearn.preprocessing import StandardScaler
 
-class Processing():
+
+class Processing:
 
     def __init__(self):
         self.scaler = None
