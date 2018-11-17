@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from algorithms import svr, gpr, regression, random_forest_regression, decision_tree_regression
+from algorithms import svr, gpr, plsr, regression, random_forest_regression, decision_tree_regression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
@@ -28,7 +28,8 @@ def svr_test(features_train, features_test, output_train, output_test):
 def gpr_test(features_train, features_test, output_train, output_test):
     method = gpr.Gpr(features_train, output_train)
     method.fit()
-    output_predicted, mse = method.predict(features_test)
+    output_predicted, deviation = method.predict(features_test)
+    mse = mean_squared_error(output_test, output_predicted)
     print('GPR MSE : {}'.format(mse))
     return mse
 
@@ -60,6 +61,24 @@ def random_forest_test(features_train, features_test, output_train, output_test)
     return mse
 
 
+def decision_tree_test(features_train, features_test, output_train, output_test):
+    method = decision_tree_regression.DecisionTree(features_train, output_train)
+    method.fit()
+    output_predicted = method.predict(features_test)
+    mse = mean_squared_error(output_test, output_predicted)
+    print('Decision Tree Regression MSE : {}'.format(mse))
+    return mse
+
+
+def p_least_square_test(features_train, features_test, output_train, output_test):
+    method = plsr.Plsr(features_train, output_train)
+    method.fit()
+    output_predicted = method.predict(features_test)
+    mse = mean_squared_error(output_test, output_predicted)
+    print('Partial least squares Regression MSE : {}'.format(mse))
+    return mse
+
+
 if __name__ == "__main__":
     data = load_data()
     # plot_values(data)
@@ -73,5 +92,7 @@ if __name__ == "__main__":
     poly_regression_test(features_train, features_test, output_train, output_test)
     linear_regression_test(features_train, features_test, output_train, output_test)
     random_forest_test(features_train, features_test, output_train, output_test)
+    decision_tree_test(features_train, features_test, output_train, output_test)
+    p_least_square_test(features_train, features_test, output_train, output_test)
     # ERROR WITH GPR!!!!!!!!!!!!
     # gpr_test(features_train, features_test, output_train, output_test)

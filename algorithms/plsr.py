@@ -46,5 +46,8 @@ class Plsr:
         plt.show()
 
     def predict(self, value=6.5):
-        y_pred = self.regressor.predict(self.sc_X.transform(np.array([[value]])))
+        if type(value) is np.ndarray:
+            y_pred = self.regressor.predict(self.sc_X.transform(value))
+        else:
+            y_pred = self.regressor.predict(self.sc_X.transform(np.array([[value]])))
         return self.sc_y.inverse_transform(y_pred)
