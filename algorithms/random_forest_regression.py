@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 
 '''
@@ -48,6 +49,21 @@ class RandomForest:
         plt.xlabel('Position level')
         plt.ylabel('Salary')
         plt.show()
+
+    # to find the best model and the best parameters
+    def grid_search(self):
+        parameters = [{'n_estimators': [10, 50, 70, 100, 200], 'random_state': [0, 1, 2, None]}
+                      ]
+        grid_search = GridSearchCV(estimator=self.regressor,
+                                   param_grid=parameters,
+                                   cv=10,
+                                   n_jobs=-1)
+        grid_search = grid_search.fit(self.X, self.y)
+        best_accuracy = grid_search.best_score_
+        print('Accuracy : {}'.format(best_accuracy))
+        best_parameters = grid_search.best_params_
+        print('Parameters : {}'.format(best_parameters))
+        self.regressor = grid_search
 
     def predict(self, value=6.5):
         return self.regressor.predict(value)

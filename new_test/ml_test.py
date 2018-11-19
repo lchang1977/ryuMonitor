@@ -55,6 +55,7 @@ def linear_regression_test(features_train, features_test, output_train, output_t
 def random_forest_test(features_train, features_test, output_train, output_test):
     method = random_forest_regression.RandomForest(features_train, output_train)
     method.fit()
+    method.grid_search()
     output_predicted = method.predict(features_test)
     mse = mean_squared_error(output_test, output_predicted)
     print('Random Forest Regression MSE : {}'.format(mse))
